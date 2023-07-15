@@ -62,12 +62,7 @@ def main():
         # add the handlers to the logger
         logger.addHandler(ch)
     
-    logger.debug("This is a debug")
-    logger.info("This is a info")
-    logger.warning("This is a warning")
-    logger.error("This is an error")
-    logger.critical("This is an critical")
-    controller.test_logging()
+    controller.menu()
 
 
 if __name__ == "__main__":
