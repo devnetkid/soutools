@@ -12,11 +12,7 @@ def setup_folder_structure(path):
         os.makedirs(path)
 
 def main():
-    # Setup path to location of the settings file and load settings
-    home_dir = os.path.expanduser("~")
-    settings_path = os.path.join(home_dir, 'soutools/settings/settings.toml')
-    get_settings = settings.Settings(settings_path)
-    get_settings.load_settings()
+    get_settings = settings.Settings()
 
     # Get logging information from settings
     file_log_level = get_settings.get_value('logging.file_log_level')
@@ -25,6 +21,7 @@ def main():
     console_log_level = get_settings.get_value('logging.console_log_level')
 
     # Setup log path and ensure that folders exist and if not, then create them
+    home_dir = os.path.expanduser("~")
     log_path = os.path.join(home_dir, file_log_path)
     setup_folder_structure(log_path)
     log_file = f'{log_path}soutools_log__{datetime.now():%Y-%m-%d_%H-%M-%S}.log'
@@ -62,6 +59,7 @@ def main():
         # add the handlers to the logger
         logger.addHandler(ch)
     
+    logger.debug("Logger initialized, calling controller menu")
     controller.menu()
 
 

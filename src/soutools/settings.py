@@ -3,9 +3,10 @@ import tomlkit
 
 
 class Settings:
-    def __init__(self, file_name):
+    def __init__(self, file_name='soutools/settings/settings.toml'):
         self.file_name = file_name
         self.settings = None
+        self.load_settings()
 
     def load_settings(self):
         home_dir = os.path.expanduser("~")
