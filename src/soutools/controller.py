@@ -2,25 +2,11 @@
 
 """Controlls the main logic of the program"""
 
-import sys
-from colors import color
-from consolemenu import *
-from consolemenu.items import *
-from consolemenu.prompt_utils import PromptUtils
-import logging
+import logging, sys
 
-from soutools import model, helpers
+from soutools import menu, model, helpers
 
 logger = logging.getLogger(__name__)
-
-
-MENU_TITLE = """
-   ____          _   _         __  __                     _     _ 
-  / ___|   ___  | | | |       |  \/  |  ___  _ __   __ _ | | __(_)
-  \___ \  / _ \ | | | | _____ | |\/| | / _ \| '__| / _` || |/ /| |
-   ___) || (_) || |_| ||_____|| |  | ||  __/| |   | (_| ||   < | |
-  |____/  \___/  \___/        |_|  |_| \___||_|    \__,_||_|\_\|_|
-"""
 
 dashboard = model.MerakiModel()
 org_id = None
@@ -43,7 +29,21 @@ def view_organization():
     else:
         print(f'You have choosen the "{org_name}"" organization\n')
         logger.debug(f"Notified user that organization name is set to {org_name}")
-    PromptUtils(Screen()).enter_to_continue()
+    input('Press [ENTER] to continue...')
+
+def wireless_options():
+    menu_title = helpers.menu_title
+    wireless_menu = menu.Menu(
+    menu_title, [
+    ('Generate a report of all sites of type wireless', wireless_report),
+    ('Generate a report of all sites with a particular SSID', wireless_with_ssid_x_report),
+    ('Update radius servers for a particular SSID', update_radius_settings),
+    ('Return to the main menu', main_menu),
+    ('Exit', quit)])
+
+    while True:
+        wireless_menu.display()
+        wireless_menu.get_input()
 
 def wireless_report():
     logger.debug('The "wireless_report" function called')
@@ -53,40 +53,30 @@ def wireless_report():
         print('No organization selected, please select organization first\n')
     path = helpers.get_settings.get_value('wireless_networks.output_file')
     helpers.writelines_to_file(path, networks)
-    PromptUtils(Screen()).enter_to_continue()
+    input('Press [ENTER] to continue...')
 
 def wireless_with_ssid_x_report():
     logger.debug('The "wireless_with_ssid_x_report" function called')
     dashboard.wheres_ssid_x()
-    PromptUtils(Screen()).enter_to_continue()
+    input('Press [ENTER] to continue...')
 
 def update_radius_settings():
     logger.debug('The "update_radius_settings" function called')
     dashboard.update_radius_servers()
-    PromptUtils(Screen()).enter_to_continue()
+    input('Press [ENTER] to continue...')
 
-def menu():
-    logger.debug('The "menu" funciton called')
-    # Create the root menu
-    menu = ConsoleMenu(MENU_TITLE, color("Main menu screen", fg='Red'), show_exit_option=False)
-    logger.debug('The ConsoleMenu has been instantiated')
+def quit():
+    sys.exit()
 
-    # Create the wireless submenu
-    wireless_submenu = ConsoleMenu(MENU_TITLE, color("Wireless Submenu", fg='Red'), show_exit_option=False)
-    wireless_submenu.append_item(FunctionItem(color("Generate a report of all sites of type wireless", fg='Green'), wireless_report))
-    wireless_submenu.append_item(FunctionItem(color("Generate a report of all sites with a particular SSID", fg='Green'), wireless_with_ssid_x_report))
-    wireless_submenu.append_item(FunctionItem(color("Update radius servers for a particular SSID", fg='Green'), update_radius_settings))
-    wireless_submenu.append_item(ExitItem(color("Return to the main menu", fg='Green')))
-    # Menu item for opening submenu 2
-    submenu_item_2 = SubmenuItem(color("Go to wireless options", fg='Green'), submenu=wireless_submenu)
-    submenu_item_2.set_menu(menu)
+def main_menu():
+    menu_title = helpers.menu_title
+    main_menu = menu.Menu(
+    menu_title, [
+    ('Select an organization', select_organization),
+    ('View the selected organization', view_organization),
+    ('Wireless options', wireless_options),
+    ('Exit', quit)])
 
-    # Add all the items to the root menu
-    menu.append_item(FunctionItem(color("Select an organization", fg='Green'), select_organization))
-    menu.append_item(FunctionItem(color("View the selected organization", fg='Green'), view_organization))
-    menu.append_item(submenu_item_2)
-    menu.append_item(ExitItem(color("Exit program", fg='Green')))
-
-    # Show the menu
-    menu.start()
-    menu.join()
+    while True:
+        main_menu.display()
+        main_menu.get_input()

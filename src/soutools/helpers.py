@@ -65,3 +65,13 @@ def format_radius():
         accounting_payload.append(temp)
 
     return radius_payload, accounting_payload
+
+# https://patorjk.com/software/taag/ using formatting "standard"
+
+menu_title = """
+   ____        _   _ _____           _     
+  / ___|  ___ | | | |_   _|__   ___ | |___ 
+  \___ \ / _ \| | | | | |/ _ \ / _ \| / __|
+   ___) | (_) | |_| | | | (_) | (_) | \__ \\
+  |____/ \___/ \___/  |_|\___/ \___/|_|___/
+"""

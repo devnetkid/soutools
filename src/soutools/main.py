@@ -56,7 +56,7 @@ def main():
         logger.addHandler(ch)
     
     logger.debug("Logger initialized, calling controller menu")
-    controller.menu()
+    controller.main_menu()
 
 
 if __name__ == "__main__":
