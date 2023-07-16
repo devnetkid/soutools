@@ -5,11 +5,7 @@ from datetime import datetime
 import logging
 import os
 
-from soutools import settings, controller
-
-def setup_folder_structure(path):
-    if not os.path.exists(path):
-        os.makedirs(path)
+from soutools import settings, controller, helpers
 
 def main():
     get_settings = settings.Settings()
@@ -23,7 +19,7 @@ def main():
     # Setup log path and ensure that folders exist and if not, then create them
     home_dir = os.path.expanduser("~")
     log_path = os.path.join(home_dir, file_log_path)
-    setup_folder_structure(log_path)
+    helpers.setup_folder_structure(log_path)
     log_file = f'{log_path}soutools_log__{datetime.now():%Y-%m-%d_%H-%M-%S}.log'
 
     # Setup a basic logger

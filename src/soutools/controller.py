@@ -9,7 +9,7 @@ from consolemenu.items import *
 from consolemenu.prompt_utils import PromptUtils
 import logging
 
-from soutools import model
+from soutools import model, helpers
 
 logger = logging.getLogger(__name__)
 
@@ -45,16 +45,24 @@ def view_organization():
         logger.debug(f"Notified user that organization name is set to {org_name}")
     PromptUtils(Screen()).enter_to_continue()
 
-def report_of_wireless():
-    print("You have choosen report_of_wireless")
+def wireless_report():
+    logger.debug('The "wireless_report" function called')
+    if org_id:
+        networks = dashboard.get_wireless_networks(org_id)
+    else:
+        print('No organization selected, please select organization first\n')
+    path = helpers.get_settings.get_value('wireless_networks.output_file')
+    helpers.writelines_to_file(path, networks)
     PromptUtils(Screen()).enter_to_continue()
 
-def report_wireless_with_ssid():
-    print("You have choosen select report_wireless_with_ssid")
+def wireless_with_ssid_x_report():
+    logger.debug('The "wireless_with_ssid_x_report" function called')
+    dashboard.wheres_ssid_x()
     PromptUtils(Screen()).enter_to_continue()
 
-def replace_radius_settings():
-    print("You have choosen replace_radius_settings")
+def update_radius_settings():
+    logger.debug('The "update_radius_settings" function called')
+    dashboard.update_radius_servers()
     PromptUtils(Screen()).enter_to_continue()
 
 def menu():
@@ -65,9 +73,9 @@ def menu():
 
     # Create the wireless submenu
     wireless_submenu = ConsoleMenu(MENU_TITLE, color("Wireless Submenu", fg='Red'), show_exit_option=False)
-    wireless_submenu.append_item(FunctionItem(color("Generate a report of all sites of type wireless", fg='Green'), report_of_wireless))
-    wireless_submenu.append_item(FunctionItem(color("Generate a report of all sites with a particular SSID", fg='Green'), report_wireless_with_ssid))
-    wireless_submenu.append_item(FunctionItem(color("Replace radius servers of a particular SSID", fg='Green'), replace_radius_settings))
+    wireless_submenu.append_item(FunctionItem(color("Generate a report of all sites of type wireless", fg='Green'), wireless_report))
+    wireless_submenu.append_item(FunctionItem(color("Generate a report of all sites with a particular SSID", fg='Green'), wireless_with_ssid_x_report))
+    wireless_submenu.append_item(FunctionItem(color("Update radius servers for a particular SSID", fg='Green'), update_radius_settings))
     wireless_submenu.append_item(ExitItem(color("Return to the main menu", fg='Green')))
     # Menu item for opening submenu 2
     submenu_item_2 = SubmenuItem(color("Go to wireless options", fg='Green'), submenu=wireless_submenu)
