@@ -43,12 +43,20 @@ On Windows
 ## Usage
 
 To use the program, open a terminal window and type `soutools`
-You will see a menu with four options
+
+You should see a menu with four options
 
     1 - Select an organization
     2 - View the selected organization
     3 - Wireless options
     4 - Exit
+
+The first time you run the program it will create a settings file in your home directory called settings.toml 
+the path to the file is your_home_directory/soutools/settings/settings.toml. With the default
+settings the tool will look for the API Key in the environment variable called `MERAKI_DASHBOARD_API_KEY`. If that
+is not set yet then you will get "API Key not found". The other way to add your API Key is to open the settings.toml file
+and paste in your key under the [meraki] api_key = false. Paste your key in place of false and make sure to wrap it in
+quotation marks.
 
 If you haven't entered a DEFAULT_ORG_ID in the settings.toml file then you will need to start with 1.
 You can use 2 to confirm which organization ID is selected.
@@ -69,7 +77,10 @@ under section 3.1 output_file. The file will include network_id,network_name. Se
     1394582934587239847,mysite4
     ...
 
-Once you have that list move onto option 2 to find the sites that have the SSID you require to be changed.
+Once you have that list move onto option 2 to find the sites that have the SSID you require to be changed. Make sure
+to edit the settings file section 3.2 and put in the ssid = 'yourSSID' if you desire you can also modify teh input and
+output files. They are setup in a way that the previous one feeds the next so that you don't have to make any modifications
+if you don't want to.
 
     2394582934587239847,mysite1,mySSID,0
     4239458293458729847,mysite2,mySSID,0
@@ -79,7 +90,7 @@ Once you have that list move onto option 2 to find the sites that have the SSID 
 
 The final step in the process, option 3, is the step that will take the data you have built up from the previous steps
 and use it to change the radius settings of the given SSID. Check the output logs specified in the settings file to see 
-the final results
+the final results. Make sure you update the radius settings.
 
     # Overall settings
     [LOGGING]

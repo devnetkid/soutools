@@ -39,10 +39,14 @@ def writelines_to_file(path, text):
 
 def get_networks_list(path):
     filepath = os.path.join(home_dir, path)
-    
-    with open(filepath, 'r') as netdata:
-        networks = netdata.readlines()
-    return networks
+    try:
+        with open(filepath, 'r') as netdata:
+            networks = netdata.readlines()
+        return networks
+    except FileNotFoundError:
+        logger.error(f'Could not open {path}')
+        sys.exit()        
+
 
 def format_radius():
     radius = get_settings.get_value('radius_servers')
@@ -65,6 +69,7 @@ def format_radius():
         accounting_payload.append(temp)
 
     return radius_payload, accounting_payload
+
 
 # https://patorjk.com/software/taag/ using formatting "standard"
 

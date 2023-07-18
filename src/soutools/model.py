@@ -20,10 +20,10 @@ class MerakiModel:
     def __init__(self) -> None:
         self.logger = logging.getLogger(__name__)
         logger.info("Instantiated an instance of the model.MerakiModel class")
-        if helpers.get_settings.get_value('meraki.API_KEY'):
-            api_key = helpers.get_settings.get_value('meraki.API_KEY')
-        elif helpers.get_settings.get_value('meraki.API_KEY_ENVIRONMENT_VARIABLE') in os.environ:
-            api_key = os.environ.get(helpers.get_settings.get_value('meraki.API_KEY_ENVIRONMENT_VARIABLE'))
+        if helpers.get_settings.get_value('meraki.api_key'):
+            api_key = helpers.get_settings.get_value('meraki.api_key')
+        elif helpers.get_settings.get_value('meraki.api_key_environment_variable') in os.environ:
+            api_key = os.environ.get(helpers.get_settings.get_value('meraki.api_key_environment_variable'))
         else:
             logger.error("API Key not found")
             sys.exit("ERROR: API Key not found")
@@ -32,11 +32,11 @@ class MerakiModel:
         # Instantiate an instance of the Meraki dashboard
         self.dashboard = meraki.DashboardAPI(
             api_key=api_key,
-            output_log=helpers.get_settings.get_value('meraki.OUTPUT_LOG'), 
-            print_console=helpers.get_settings.get_value('meraki.PRINT_TO_CONSOLE'), 
-            suppress_logging=helpers.get_settings.get_value('meraki.SUPPRESS_LOGGING'),
-            log_file_prefix=helpers.get_settings.get_value('meraki.LOG_FILE_PREFIX'),
-            log_path=helpers.get_settings.get_value('meraki.LOG_PATH')
+            output_log=helpers.get_settings.get_value('meraki.output_log'), 
+            print_console=helpers.get_settings.get_value('meraki.print_to_console'), 
+            suppress_logging=helpers.get_settings.get_value('meraki.suppress_logging'),
+            log_file_prefix=helpers.get_settings.get_value('meraki.log_file_prefix'),
+            log_path=helpers.get_settings.get_value('meraki.log_path')
         )
 
 

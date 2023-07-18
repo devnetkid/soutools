@@ -9,8 +9,8 @@ from soutools import menu, model, helpers
 logger = logging.getLogger(__name__)
 
 dashboard = model.MerakiModel()
-org_id = None
-org_name = None
+org_id = helpers.get_settings.get_value('default_org_id')
+org_name = helpers.get_settings.get_value('default_org_name')
 
 def select_organization():
     global org_id, org_name
