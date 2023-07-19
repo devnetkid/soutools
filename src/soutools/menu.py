@@ -1,5 +1,3 @@
-# menu.py
-
 """This is used to handle the menu system"""
 
 from collections import namedtuple
@@ -27,7 +25,8 @@ class Menu:
     def get_input(self):
         while True:
             try:
-                selection = int(input("\nPlease enter your selection number: "))
+                selection = int(input("\nOption >> "))
+                print('')
                 if selection not in range(1,len(self._options)+1):
                     print('\nEntry not in range, please try again: ')
                     input("Press Enter to Continue\n")

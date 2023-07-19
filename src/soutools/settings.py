@@ -1,3 +1,5 @@
+"""This module is used to load the settings.toml file and provides a way to access those settings"""
+
 import os
 import tomlkit
 
@@ -46,6 +48,7 @@ class Settings:
         return value
 
 
+# This is used to create a default template for the settings.toml file
 toml_template = """# settings.toml
 
 default_org_id = ''

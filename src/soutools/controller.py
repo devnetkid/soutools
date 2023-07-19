@@ -1,33 +1,33 @@
-#controller.py
-
 """Controlls the main logic of the program"""
 
 import logging, sys
 
+from rich.console import Console
+
 from soutools import menu, model, helpers
 
 logger = logging.getLogger(__name__)
-
 dashboard = model.MerakiModel()
 org_id = helpers.get_settings.get_value('default_org_id')
 org_name = helpers.get_settings.get_value('default_org_name')
+console = Console()
+
 
 def select_organization():
     global org_id, org_name
     logger.debug('The "select_organization" function called')
     org_id, org_name = dashboard.select_organization()
-    logger.debug(f'The selected organization ID is "{org_id}"')
-    logger.debug(f'The selected organization name is "{org_name}"')
+    logger.info(f'The selected organization ID is "{org_id}"')
     logger.info(f'The selected organization name is "{org_name}"')
 
 def view_organization():
     logger.debug('The "view_organization" function called')
     logger.debug("Checking if organization name is set")
     if not org_name:
-        print("You have not selected an organization yet\n")
+        console.print("You have [cyan]not[/cyan] selected an organization yet\n")
         logger.debug("Notified user that organization name is not set")
     else:
-        print(f'You have choosen the "{org_name}"" organization\n')
+        console.print(f'You have choosen the "[green]{org_name}[/green]" organization, ID: [green]{org_id}[/green]\n')
         logger.debug(f"Notified user that organization name is set to {org_name}")
     input('Press [ENTER] to continue...')
 
