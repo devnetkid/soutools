@@ -122,6 +122,7 @@ class MerakiModel:
                         found_ssid = True
                         newline = f"{site_id},{site_name},{ssid['name']},{ssid['number']}\n"
                         ssid_sites.append(newline)
+                        logger.info("Found given SSID for {site_name}")
                         found_count += 1
                         total += 1
                         progress.update(task1, advance=1)
@@ -130,7 +131,6 @@ class MerakiModel:
                     total += 1
                     progress.update(task2, advance=1)
                 progress.update(task3, advance=1)
-                
         helpers.writelines_to_file(path, ssid_sites)
 
 
@@ -151,11 +151,11 @@ class MerakiModel:
             ssid_num = site[3].strip('\n')
             logger.info(f'Updating radius settings for {net_name} and SSID number {ssid_num}')
             logger.debug(f'Calling Meraki dashboard with {net_id} {ssid_num} {radius} {accounting}')
-            self.dashboard.wireless.updateNetworkWirelessSsid(
-                networkId=net_id,
-                number=ssid_num, 
-                radiusServers=radius,
-                radiusAccountingServers=accounting
-            )
+            #self.dashboard.wireless.updateNetworkWirelessSsid(
+            #    networkId=net_id,
+            #    number=ssid_num, 
+            #    radiusServers=radius,
+            #    radiusAccountingServers=accounting
+            #)
             counter += 1
         logger.info(f'Updated radius settings on {counter} SSIDs')

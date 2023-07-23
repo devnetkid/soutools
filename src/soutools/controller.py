@@ -27,7 +27,8 @@ def view_organization():
         console.print("You have [cyan]not[/cyan] selected an organization yet\n")
         logger.debug("Notified user that organization name is not set")
     else:
-        console.print(f'You have choosen the "[green]{org_name}[/green]" organization, ID: [green]{org_id}[/green]\n')
+        print(f'You have choosen the ' + helpers.colorme(org_name, 'blue') + ' organization, ID: ' + helpers.colorme(org_id, 'blue'))
+        #console.print(f'You have choosen the "[green]{org_name}[/green]" organization, ID: [green]{org_id}[/green]\n')
         logger.debug(f"Notified user that organization name is set to {org_name}")
     input('Press [ENTER] to continue...')
 
@@ -78,5 +79,4 @@ def main_menu():
     ('Exit', quit)])
 
     while True:
-        main_menu.display()
         main_menu.get_input()

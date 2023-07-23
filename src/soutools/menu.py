@@ -25,6 +25,7 @@ class Menu:
     def get_input(self):
         while True:
             try:
+                self.display()
                 selection = int(input("\nOption >> "))
                 print('')
                 if selection not in range(1,len(self._options)+1):
