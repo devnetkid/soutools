@@ -1,8 +1,7 @@
 """Controlls the main logic of the program"""
 
-import logging, sys
-
-from rich.console import Console
+import logging
+import sys
 
 from soutools import menu, model, helpers
 
@@ -10,27 +9,28 @@ logger = logging.getLogger(__name__)
 dashboard = model.MerakiModel()
 org_id = helpers.get_settings.get_value('default_org_id')
 org_name = helpers.get_settings.get_value('default_org_name')
-console = Console()
 
 
 def select_organization():
     global org_id, org_name
     logger.debug('The "select_organization" function called')
     org_id, org_name = dashboard.select_organization()
-    logger.info(f'The selected organization ID is "{org_id}"')
+    logger.debug(f'The selected organization ID is "{org_id}"')
     logger.info(f'The selected organization name is "{org_name}"')
+
 
 def view_organization():
     logger.debug('The "view_organization" function called')
-    logger.debug("Checking if organization name is set")
+    logger.debug('Checking if organization name is set')
     if not org_name:
-        console.print("You have [cyan]not[/cyan] selected an organization yet\n")
-        logger.debug("Notified user that organization name is not set")
+        print('\nYou have not selected an organization yet\n')
+        logger.debug('Notified user that organization name is not set')
     else:
-        print(f'You have choosen the ' + helpers.colorme(org_name, 'blue') + ' organization, ID: ' + helpers.colorme(org_id, 'blue'))
-        #console.print(f'You have choosen the "[green]{org_name}[/green]" organization, ID: [green]{org_id}[/green]\n')
+        blue_highlight = helpers.colorme(org_name, 'blue')
+        print(f'\nThe "{blue_highlight}" organization is currently selected\n')
         logger.debug(f"Notified user that organization name is set to {org_name}")
     input('Press [ENTER] to continue...')
+
 
 def wireless_options():
     menu_title = helpers.menu_title
@@ -41,10 +41,9 @@ def wireless_options():
     ('Update radius servers for a particular SSID', update_radius_settings),
     ('Return to the main menu', main_menu),
     ('Exit', quit)])
-
     while True:
-        wireless_menu.display()
         wireless_menu.get_input()
+
 
 def wireless_report():
     logger.debug('The "wireless_report" function called')
@@ -56,18 +55,22 @@ def wireless_report():
     helpers.writelines_to_file(path, networks)
     input('Press [ENTER] to continue...')
 
+
 def wireless_with_ssid_x_report():
     logger.debug('The "wireless_with_ssid_x_report" function called')
     dashboard.wheres_ssid_x()
     input('Press [ENTER] to continue...')
+
 
 def update_radius_settings():
     logger.debug('The "update_radius_settings" function called')
     dashboard.update_radius_servers()
     input('Press [ENTER] to continue...')
 
+
 def quit():
     sys.exit()
+
 
 def main_menu():
     menu_title = helpers.menu_title
@@ -77,6 +80,5 @@ def main_menu():
     ('View the selected organization', view_organization),
     ('Wireless options', wireless_options),
     ('Exit', quit)])
-
     while True:
         main_menu.get_input()

@@ -1,12 +1,15 @@
 """This module is used to assists the other modules with functions like writting to file"""
 
-import logging, os, sys
+import logging
+import platform
+import os
+import sys
 
 from soutools import settings
 
 logger = logging.getLogger(__name__)
 get_settings = settings.Settings()
-home_dir = os.path.expanduser("~")
+home_dir = os.path.expanduser('~')
 
 
 def setup_folder_structure(path):
@@ -33,6 +36,29 @@ def writelines_to_file(path, text):
     except FileNotFoundError:
         logger.error(f'Could not open {location}')
         sys.exit()
+
+
+def validate_integer_in_range(end_range):
+    """Prompts user to select a number within a defined range
+
+    Args:
+        end_range (int): The upper bound number that can be selected
+
+    Returns:
+        int: The selected number
+    """
+
+    while True:
+        try:
+            selected = int(input("\n  Select an option >> "))
+            assert selected in range(1, end_range)
+        except ValueError:
+            print("\tThat is not an integer!\n")
+        except AssertionError:
+            print(f"\n\tYou must enter a number between 0 and {end_range}")
+        else:
+            break
+    return selected
 
 
 def get_networks_list(path):
@@ -69,96 +95,49 @@ def format_radius():
     return radius_payload, accounting_payload
 
 
-def validate_integer_in_range(end_range):
-    """Prompts user to select a number within a defined range
-
-    Args:
-        end_range (int): The upper bound number that can be selected
-
-    Returns:
-        int: The selected number
-    """
-
-    while True:
-        try:
-            selected = int(input("\nOption >> "))
-            assert selected in range(0, end_range)
-        except ValueError:
-            print("\tThat is not an integer!\n")
-        except AssertionError:
-            print(f"\n\tYou must enter a number between 0 and {end_range-1}")
-        else:
-            break
-    return selected
-
-
-def progress_bar_1(progress, total):
-    percent = 100 * (progress / float(total))
-    bar = '█' * int(percent) + '-' * (100 - int(percent))
-    print(f'\rProgress |{bar}| {percent:.2f}% Complete', end='\r')
-
-
-def new_progress_bar(iteration, total, prefix='', suffix='', decimals=1, length=100, fill='>'):
-    percent = ('{0:.}' + str(decimals) + 'f}').format(100 * (iteration/float(total)))
-    filled_length = int(length * iteration // total)
-    bar = fill * filled_length + '-' * (length - filled_length)
-    print(f'\r{prefix} |{bar}| {percent}% {suffix}', end='\r')
-    if iteration == total:
-        print()
-
-
-# Print iterations progress
-def progress_bar (iteration, total, prefix = '', suffix = '', decimals = 1, length = 100, fill = '█', printEnd = "\r"):
-    """
-    Call in a loop to create terminal progress bar
-    @params:
-        iteration   - Required  : current iteration (Int)
-        total       - Required  : total iterations (Int)
-        prefix      - Optional  : prefix string (Str)
-        suffix      - Optional  : suffix string (Str)
-        decimals    - Optional  : positive number of decimals in percent complete (Int)
-        length      - Optional  : character length of bar (Int)
-        fill        - Optional  : bar fill character (Str)
-        printEnd    - Optional  : end character (e.g. "\r", "\r\n") (Str)
-    """
-    percent = ("{0:." + str(decimals) + "f}").format(100 * (iteration / float(total)))
-    filledLength = int(length * iteration // total)
-    bar = fill * filledLength + '-' * (length - filledLength)
-    print(f'\r{prefix} |{bar}| {percent}% {suffix}', end = printEnd)
-    # Print New Line on Complete
-    if iteration == total: 
-        print('\n\n')
-
-
-def clear_line(n=1):
-    LINE_UP = '\033[1A'
-    LINE_CLEAR = '\x1b[2K'
-    for i in range(n):
-        print(LINE_UP, end=LINE_CLEAR)
+def progress_bar(progress, total, width=40):
+    char = chr(9632)
+    logger.info(f'progress is {progress}')
+    logger.info(f'total is {total}')
+    if progress >= total:
+        logger.info('finished has been set to true')
+        fill_char = colorme(char, 'green')
+    else:
+        fill_char = colorme(char, 'red')
+    completed = int(width * (progress / total))
+    bar = 'Progress: [' + fill_char * completed + '-' * (width - completed) + '] '
+    percent_done = round(progress / total * 100, 1)
+    bar += str(percent_done) + '% ' + str(progress) + '/' + str(total)
+    return bar
 
 
 def colorme(msg, color):
-    reset = '\033[0m'
     if color == 'red':
-        decoration = '\033[31m'
-    elif color == 'green':
-        decoration = '\033[32m'
+        wrapper = '\033[91m'
     elif color == 'blue':
-        decoration = '\033[94m'
-    elif color == 'yellow':
-        decoration = '\033[93m'
+        wrapper = '\033[94m'
+    elif color == 'green':
+        wrapper = '\033[92m'
     else:
-        raise ValueError('Invalid color')
-    return decoration + msg + reset
+        # Defaults to white if invalid color is given
+        wrapper = '\033[47m'
+    return wrapper + msg + '\033[0m'
 
 
-# asci art generated by
+def clear_screen():
+    if(platform.system().lower()=='windows'):
+        cmd = 'cls'
+    else:
+        cmd = 'clear'
+    os.system(cmd)
+    
+
 # https://patorjk.com/software/taag/ using formatting "standard"
 
-menu_title = """
+menu_title = colorme("""
    ____        _   _ _____           _     
   / ___|  ___ | | | |_   _|__   ___ | |___ 
   \___ \ / _ \| | | | | |/ _ \ / _ \| / __|
    ___) | (_) | |_| | | | (_) | (_) | \__ \\
   |____/ \___/ \___/  |_|\___/ \___/|_|___/
-"""
+""", 'red')
