@@ -40,6 +40,29 @@ def writelines_to_file(path, text):
         sys.exit()
 
 
+def validate_integer_in_range(end_range):
+    """Prompts user to select a number within a defined range
+
+    Args:
+        end_range (int): The upper bound number that can be selected
+
+    Returns:
+        int: The selected number
+    """
+
+    while True:
+        try:
+            selected = int(input("\n  Select an option >> "))
+            assert selected in range(1, end_range)
+        except ValueError:
+            print("\tThat is not an integer!\n")
+        except AssertionError:
+            print(f"\n\tYou must enter a number between 0 and {end_range}")
+        else:
+            break
+    return selected
+
+
 def get_networks_list(path):
     filepath = os.path.join(home_dir, path)
     try:

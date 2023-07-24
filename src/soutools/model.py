@@ -58,12 +58,12 @@ class MerakiModel:
         except meraki.exceptions.APIError:
             sys.exit('Check network connection and/or DNS settings.')
         counter = 1
-        print('  Organizations\n')
+        print('  Organizations to choose from:\n')
         for organization in organizations:
             name = helpers.colorme(f"{str(counter)} - {organization['name']}", 'green')
             print(f'    {name}')
             counter += 1
-        selected = int(input('\nSelect an option >> ')) # misc.validate_integer_in_range(counter)
+        selected = helpers.validate_integer_in_range(counter)
         return (
             organizations[int(selected) - 1]['id'],
             organizations[int(selected) - 1]['name']
