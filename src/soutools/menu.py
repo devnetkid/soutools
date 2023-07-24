@@ -1,3 +1,5 @@
+# menu.py
+
 """This is used to handle the menu system"""
 
 from collections import namedtuple
