@@ -44,9 +44,7 @@ def wireless_options():
     ('Update radius servers for a particular SSID', update_radius_settings),
     ('Return to the main menu', main_menu),
     ('Exit', quit)])
-
     while True:
-        wireless_menu.display()
         wireless_menu.get_input()
 
 
@@ -85,6 +83,5 @@ def main_menu():
     ('View the selected organization', view_organization),
     ('Wireless options', wireless_options),
     ('Exit', quit)])
-
     while True:
         main_menu.get_input()

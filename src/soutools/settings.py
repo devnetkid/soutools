@@ -92,8 +92,6 @@ secret = "mySecret"
 [logging]
 file_log_level = 'info'
 file_log_path = 'soutools/output/logs/'
-log_to_console = true
-console_log_level = 'info'
 
 # Spefic to the meraki library
 [meraki]

@@ -16,8 +16,6 @@ def main():
     # Get logging information from settings
     file_log_level = get_settings.get_value('logging.file_log_level')
     file_log_path = get_settings.get_value('logging.file_log_path')
-    log_to_console = get_settings.get_value('logging.log_to_console')
-    console_log_level = get_settings.get_value('logging.console_log_level')
 
     # Setup log path and ensure that folders exist and if not, then create them
     home_dir = os.path.expanduser('~')
@@ -51,25 +49,13 @@ def main():
     logger.addHandler(fh)
 
     # create console handler and add it to the logger
-    if log_to_console:
-        ch = logging.StreamHandler()
-                # Validate log level is a proper instance
-        console_level = getattr(logging, console_log_level.upper(), None)
-        if isinstance(console_level, int):
-            ch.setLevel(level = console_level)
-        else:
-            error = f'Invalid value "{console_log_level}" specified for the console_log_level'
-            error = helpers.colorme(error, 'red')
-            blue_text = helpers.colorme('console_log_level', 'blue')
-            error += f'\n  Check {blue_text} in the settings.toml'
-            error += '\n  Valid values are "debug", "info", "warning", "error", and "critical"'
-            print()
-            sys.exit('  ' + error)
-        # create formatter and add it to the handler
-        formatter = logging.Formatter('%(levelname)8s - %(message)s')
-        ch.setFormatter(formatter)
-        # add the handlers to the logger
-        logger.addHandler(ch)
+    ch = logging.StreamHandler()
+    ch.setLevel(level = 'WARNING')
+    # create formatter and add it to the handler
+    formatter = logging.Formatter('%(levelname)8s - %(message)s')
+    ch.setFormatter(formatter)
+    # add the handlers to the logger
+    logger.addHandler(ch)
     
     logger.debug('Logger initialized, calling controller menu')
     controller.main_menu()

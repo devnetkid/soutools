@@ -57,16 +57,16 @@ class MerakiModel:
             logger.debug(f'organizations is equal to {organizations}')
         except meraki.exceptions.APIError:
             sys.exit('Check network connection and/or DNS settings.')
-        counter = 0
-        print(f'\n{helpers.colorme("Organizations", "blue")}:\n')
+        counter = 1
+        print('  Organizations\n')
         for organization in organizations:
             name = helpers.colorme(f"{str(counter)} - {organization['name']}", 'green')
-            print(f'  {name}')
+            print(f'    {name}')
             counter += 1
         selected = int(input('\nSelect an option >> ')) # misc.validate_integer_in_range(counter)
         return (
-            organizations[int(selected)]['id'],
-            organizations[int(selected)]['name']
+            organizations[int(selected) - 1]['id'],
+            organizations[int(selected) - 1]['name']
         )
 
 
@@ -85,7 +85,6 @@ class MerakiModel:
             else:
                 logger.info(f'network {network["name"]}, was identified as not having some type of wireless')
                 no_wireless += 1
-        
         logger.info(f'INFO: There are {wireless} sites with some type of wireless device')
         logger.info(f'INFO: There were {no_wireless} sites with no wireless')
         
@@ -101,9 +100,14 @@ class MerakiModel:
         logger.debug(f'Searching for ssid "{search_ssid}"')
         logger.debug(f'Searching for networks found in "{input_file}"')
         logger.debug(f'Writting to path "{path}"')
-        found_count = not_found_count = 0 
+        progress = found_count = not_found_count = 0 
+        total = len(networks)
+        logger.info(f'The total networks is {total}')
         ssid_sites = []
+        print()
         for network in networks:
+            bar = helpers.progress_bar(progress, total)
+            print(bar, end='', flush=True)
             site = network.split(',')
             site_id = site[0]
             site_name = site[1].strip('\n')
@@ -117,9 +121,15 @@ class MerakiModel:
                     ssid_sites.append(newline)
                     logger.info(f'Found SSID {search_ssid} for "{site_name}"')
                     found_count += 1
+                    progress += 1
             if not found_ssid:
                 logger.info(f'SSID {search_ssid} was not found for "{site_name}"')
                 not_found_count += 1
+                progress += 1
+            print('\b' * len(bar), end='', flush=True)
+        bar = helpers.progress_bar(progress, total)
+        print(bar, end='', flush=True)
+        print('\n')
         helpers.writelines_to_file(path, ssid_sites)
         logger.info(f'Sites with SSID {search_ssid}, found {found_count}')
         logger.info(f'Sites without SSID {search_ssid}, found {not_found_count}')
@@ -134,8 +144,11 @@ class MerakiModel:
         logger.debug(f'We are searching for radius servers "{radius}"')
         logger.debug(f'We are searching for accounting servers "{accounting}"')
         
-        counter = 0
+        progress = 0
+        total = len(networks)
         for network in networks:
+            bar = helpers.progress_bar(progress, total)
+            print(bar, end='', flush=True)
             site = network.split(',')
             net_id = site[0]
             net_name = site[1]
@@ -148,5 +161,9 @@ class MerakiModel:
                 radiusServers=radius,
                 radiusAccountingServers=accounting
             )
-            counter += 1
-        logger.info(f'Updated radius settings on {counter} SSIDs')
+            progress += 1
+            print('\b' * len(bar), end='', flush=True)
+        logger.info(f'Updated radius settings on {progress} SSIDs')
+        bar = helpers.progress_bar(progress, total)
+        print(bar, end='', flush=True)
+        print('\n')

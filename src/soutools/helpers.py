@@ -74,6 +74,22 @@ def format_radius():
     return radius_payload, accounting_payload
 
 
+def progress_bar(progress, total, width=40):
+    char = chr(9632)
+    logger.info(f'progress is {progress}')
+    logger.info(f'total is {total}')
+    if progress >= total:
+        logger.info('finished has been set to true')
+        fill_char = colorme(char, 'green')
+    else:
+        fill_char = colorme(char, 'red')
+    completed = int(width * (progress / total))
+    bar = 'Progress: [' + fill_char * completed + '-' * (width - completed) + '] '
+    percent_done = round(progress / total * 100, 1)
+    bar += str(percent_done) + '% ' + str(progress) + '/' + str(total)
+    return bar
+
+
 def colorme(msg, color):
     if color == 'red':
         wrapper = '\033[91m'
@@ -82,7 +98,7 @@ def colorme(msg, color):
     elif color == 'green':
         wrapper = '\033[92m'
     else:
-        # Defaults to white
+        # Defaults to white if invalid color is given
         wrapper = '\033[47m'
     return wrapper + msg + '\033[0m'
 
