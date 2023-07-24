@@ -1,11 +1,14 @@
-# main.py
+#!/usr/bin/env python3
+
 """Initialize logger and hand off control to the controller module"""
 
 from datetime import datetime
 import logging
-import os
+import os, sys
 
 from soutools import settings, controller, helpers
+
+helpers.clear_screen()
 
 def main():
     get_settings = settings.Settings()
@@ -17,7 +20,7 @@ def main():
     console_log_level = get_settings.get_value('logging.console_log_level')
 
     # Setup log path and ensure that folders exist and if not, then create them
-    home_dir = os.path.expanduser("~")
+    home_dir = os.path.expanduser('~')
     log_path = os.path.join(home_dir, file_log_path)
     helpers.setup_folder_structure(log_path)
     log_file = f'{log_path}soutools_log__{datetime.now():%Y-%m-%d_%H-%M-%S}.log'
@@ -30,10 +33,17 @@ def main():
     fh = logging.FileHandler(filename=log_file)
     # Validate log level is a proper instance
     file_level = getattr(logging, file_log_level.upper(), None)
-    if not isinstance(file_level, int):
-        raise ValueError('Invalid log level: %s' % file_log_level)
-    else:
+    if isinstance(file_level, int):
         fh.setLevel(level = file_level)
+    else:
+        error = f'Invalid value "{file_log_level}" specified for the file_log_level'
+        error = helpers.colorme(error, 'red')
+        blue_text = helpers.colorme('file_log_level', 'blue')
+        error += f'\n  Check {blue_text} in the settings.toml'
+        error += '\n  Valid values are "debug", "info", "warning", "error", and "critical"'
+        print()
+        sys.exit('  ' + error)
+
     # create formatter and add it to the handler
     formatter = logging.Formatter('%(asctime)2s - %(name)19s - %(levelname)8s - %(message)s')
     fh.setFormatter(formatter)
@@ -45,19 +55,25 @@ def main():
         ch = logging.StreamHandler()
                 # Validate log level is a proper instance
         console_level = getattr(logging, console_log_level.upper(), None)
-        if not isinstance(console_level, int):
-            raise ValueError('Invalid log level: %s' % console_log_level)
-        else:
+        if isinstance(console_level, int):
             ch.setLevel(level = console_level)
+        else:
+            error = f'Invalid value "{console_log_level}" specified for the console_log_level'
+            error = helpers.colorme(error, 'red')
+            blue_text = helpers.colorme('console_log_level', 'blue')
+            error += f'\n  Check {blue_text} in the settings.toml'
+            error += '\n  Valid values are "debug", "info", "warning", "error", and "critical"'
+            print()
+            sys.exit('  ' + error)
         # create formatter and add it to the handler
         formatter = logging.Formatter('%(levelname)8s - %(message)s')
         ch.setFormatter(formatter)
         # add the handlers to the logger
         logger.addHandler(ch)
     
-    logger.debug("Logger initialized, calling controller menu")
+    logger.debug('Logger initialized, calling controller menu')
     controller.main_menu()
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()

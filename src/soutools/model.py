@@ -1,7 +1,6 @@
-#!/usr/bin/env python3
+# model.py
 
-"""This module handles the interface between the controller and the Meraki Dashboard
-"""
+"""This module handles the interface between the controller and the Meraki Dashboard"""
 
 import logging
 import os
@@ -19,14 +18,14 @@ logger.info("Loading settings for the dashboard instance")
 class MerakiModel:
     def __init__(self) -> None:
         self.logger = logging.getLogger(__name__)
-        logger.info("Instantiated an instance of the model.MerakiModel class")
+        logger.info('Instantiated an instance of the model.MerakiModel class')
         if helpers.get_settings.get_value('meraki.api_key'):
             api_key = helpers.get_settings.get_value('meraki.api_key')
         elif helpers.get_settings.get_value('meraki.api_key_environment_variable') in os.environ:
             api_key = os.environ.get(helpers.get_settings.get_value('meraki.api_key_environment_variable'))
         else:
-            logger.error("API Key not found")
-            sys.exit("ERROR: API Key not found")
+            logger.error('API Key not found')
+            sys.exit('ERROR: API Key not found')
 
 
         # Instantiate an instance of the Meraki dashboard
@@ -53,21 +52,21 @@ class MerakiModel:
         logger.debug('The "select_organization" function called from the model')
         organizations = None
         try:
-            logger.debug("Trying to get organizations from the Meraki dashboard")
+            logger.debug('Trying to get organizations from the Meraki dashboard')
             organizations = self.dashboard.organizations.getOrganizations()
-            logger.debug(f"organizations is equal to {organizations}")
+            logger.debug(f'organizations is equal to {organizations}')
         except meraki.exceptions.APIError:
-            sys.exit("Check network connection and/or DNS settings.")
+            sys.exit('Check network connection and/or DNS settings.')
         counter = 0
-        print("\nSelect organization:\n")
+        print(f'\n{helpers.colorme("Organizations", "blue")}:\n')
         for organization in organizations:
-            name = organization["name"]
-            print(f"{counter} - {name}")
+            name = helpers.colorme(f"{str(counter)} - {organization['name']}", 'green')
+            print(f'  {name}')
             counter += 1
-        selected = int(input("\nMake a choice: ")) # misc.validate_integer_in_range(counter)
+        selected = int(input('\nSelect an option >> ')) # misc.validate_integer_in_range(counter)
         return (
-            organizations[int(selected)]["id"],
-            organizations[int(selected)]["name"]
+            organizations[int(selected)]['id'],
+            organizations[int(selected)]['name']
         )
 
 
@@ -87,8 +86,8 @@ class MerakiModel:
                 logger.info(f'network {network["name"]}, was identified as not having some type of wireless')
                 no_wireless += 1
         
-        logger.info(f"INFO: There are {wireless} sites with some type of wireless device")
-        logger.info(f"INFO: There were {no_wireless} sites with no wireless")
+        logger.info(f'INFO: There are {wireless} sites with some type of wireless device')
+        logger.info(f'INFO: There were {no_wireless} sites with no wireless')
         
         return wireless_networks
 
@@ -99,9 +98,9 @@ class MerakiModel:
         input_file = helpers.get_settings.get_value('networks_with_ssid.input_file')
         networks = helpers.get_networks_list(input_file)
         path = helpers.get_settings.get_value('networks_with_ssid.output_file')
-        logger.debug(f'We are searching for ssid "{search_ssid}"')
-        logger.debug(f'We are searching for networks found in "{input_file}"')
-        logger.debug(f'We are writting to the path "{path}"')
+        logger.debug(f'Searching for ssid "{search_ssid}"')
+        logger.debug(f'Searching for networks found in "{input_file}"')
+        logger.debug(f'Writting to path "{path}"')
         found_count = not_found_count = 0 
         ssid_sites = []
         for network in networks:
@@ -112,7 +111,7 @@ class MerakiModel:
             ssids = self.dashboard.wireless.getNetworkWirelessSsids(site_id)
             found_ssid = False
             for ssid in ssids:
-                if (ssid['name'] == search_ssid and ssid['enabled'] == True and ssid['authMode'] == "8021x-radius"):
+                if (ssid['name'] == search_ssid and ssid['enabled'] == True and ssid['authMode'] == '8021x-radius'):
                     found_ssid = True
                     newline = f"{site_id},{site_name},{ssid['name']},{ssid['number']}\n"
                     ssid_sites.append(newline)
@@ -122,8 +121,8 @@ class MerakiModel:
                 logger.info(f'SSID {search_ssid} was not found for "{site_name}"')
                 not_found_count += 1
         helpers.writelines_to_file(path, ssid_sites)
-        logger.info(f"Sites with SSID {search_ssid}, found {found_count}")
-        logger.info(f"Sites without SSID {search_ssid}, found {not_found_count}")
+        logger.info(f'Sites with SSID {search_ssid}, found {found_count}')
+        logger.info(f'Sites without SSID {search_ssid}, found {not_found_count}')
 
 
     def update_radius_servers(self):
@@ -143,11 +142,11 @@ class MerakiModel:
             ssid_num = site[3].strip('\n')
             logger.info(f'Updating radius settings for {net_name} and SSID number {ssid_num}')
             logger.debug(f'Calling Meraki dashboard with {net_id} {ssid_num} {radius} {accounting}')
-        #    self.dashboard.wireless.updateNetworkWirelessSsid(
-        #        networkId=net_id,
-        #        number=ssid_num, 
-        #        radiusServers=radius,
-        #        radiusAccountingServers=accounting
-        #    )
+            self.dashboard.wireless.updateNetworkWirelessSsid(
+                networkId=net_id,
+                number=ssid_num, 
+                radiusServers=radius,
+                radiusAccountingServers=accounting
+            )
             counter += 1
         logger.info(f'Updated radius settings on {counter} SSIDs')

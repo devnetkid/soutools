@@ -1,3 +1,7 @@
+# settings.py
+
+"""Used to create settings file if not exists and get settings"""
+
 import os
 import tomlkit
 
@@ -9,8 +13,9 @@ class Settings:
         self.settings = None
         self.load_settings()
 
+
     def load_settings(self):
-        home_dir = os.path.expanduser("~")
+        home_dir = os.path.expanduser('~')
         settings_path = os.path.join(home_dir, self.file_name)
 
         if not os.path.exists(settings_path):
@@ -22,18 +27,17 @@ class Settings:
                 with open(settings_path, 'w') as toml_data:
                     toml_data.write(tomlkit.dumps(default_settings))
             except FileNotFoundError:
-                raise ValueError(f"Wasn't able to create default config file at location {settings_path}")
-
-
+                raise ValueError(f'Wasn\'t able to create default config file at location {settings_path}')
         try:
-            with open(settings_path, "r") as file:
+            with open(settings_path, 'r') as file:
                 self.settings = tomlkit.loads(file.read())
         except tomlkit.exceptions.TOMLKitError as e:
-            raise ValueError(f"Error decoding TOML file: {str(e)}")
+            raise ValueError(f'Error decoding TOML file: {str(e)}')
+
 
     def get_value(self, key):
         if self.settings is None:
-            raise ValueError("Settings have not been loaded. Call load_settings() first.")
+            raise ValueError('Settings have not been loaded. Call load_settings() first.')
 
         keys = key.split('.')
         value = self.settings

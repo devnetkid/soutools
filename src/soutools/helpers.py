@@ -3,13 +3,16 @@
 """This module is used to assists the other modules with functions like writting to file"""
 
 import logging
-import os, sys
+import platform
+import os
+import sys
+
 from soutools import settings
 
 logger = logging.getLogger(__name__)
 
 get_settings = settings.Settings()
-home_dir = os.path.expanduser("~")
+home_dir = os.path.expanduser('~')
 
 def setup_folder_structure(path):
     logger.debug('The "setup_folder_structure" function called')
@@ -71,12 +74,33 @@ def format_radius():
     return radius_payload, accounting_payload
 
 
+def colorme(msg, color):
+    if color == 'red':
+        wrapper = '\033[91m'
+    elif color == 'blue':
+        wrapper = '\033[94m'
+    elif color == 'green':
+        wrapper = '\033[92m'
+    else:
+        # Defaults to white
+        wrapper = '\033[47m'
+    return wrapper + msg + '\033[0m'
+
+
+def clear_screen():
+    if(platform.system().lower()=='windows'):
+        cmd = 'cls'
+    else:
+        cmd = 'clear'
+    os.system(cmd)
+    
+
 # https://patorjk.com/software/taag/ using formatting "standard"
 
-menu_title = """
+menu_title = colorme("""
    ____        _   _ _____           _     
   / ___|  ___ | | | |_   _|__   ___ | |___ 
   \___ \ / _ \| | | | | |/ _ \ / _ \| / __|
    ___) | (_) | |_| | | | (_) | (_) | \__ \\
   |____/ \___/ \___/  |_|\___/ \___/|_|___/
-"""
+""", 'red')
