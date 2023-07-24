@@ -30,7 +30,7 @@ def view_organization():
     else:
         blue_highlight = helpers.colorme(org_name, 'blue')
         print(f'\nThe "{blue_highlight}" organization is currently selected\n')
-        logger.debug(f"Notified user that organization name is set to {org_name}")
+        logger.debug(f'Notified user that organization name is set to {org_name}')
     input('Press [ENTER] to continue...')
 
 

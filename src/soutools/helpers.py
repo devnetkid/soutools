@@ -52,12 +52,12 @@ def validate_integer_in_range(end_range):
 
     while True:
         try:
-            selected = int(input("\n  Select an option >> "))
+            selected = int(input('\n  Select an option >> '))
             assert selected in range(1, end_range)
         except ValueError:
             print("\tThat is not an integer!\n")
         except AssertionError:
-            print(f"\n\tYou must enter a number between 0 and {end_range}")
+            print(f'\n\tYou must enter a number between 0 and {end_range}')
         else:
             break
     return selected

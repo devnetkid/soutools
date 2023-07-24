@@ -4,7 +4,8 @@
 
 from datetime import datetime
 import logging
-import os, sys
+import os
+import sys
 
 from soutools import settings, controller, helpers
 
@@ -41,11 +42,10 @@ def main():
         error += '\n  Valid values are "debug", "info", "warning", "error", and "critical"'
         print()
         sys.exit('  ' + error)
-
     # create formatter and add it to the handler
     formatter = logging.Formatter('%(asctime)2s - %(name)19s - %(levelname)8s - %(message)s')
     fh.setFormatter(formatter)
-    # add the handlers to the logger
+    # add the handler to the logger
     logger.addHandler(fh)
 
     # create console handler and add it to the logger
@@ -57,7 +57,7 @@ def main():
     # add the handlers to the logger
     logger.addHandler(ch)
     
-    logger.debug('Logger initialized, calling controller menu')
+    logger.debug('Logger initialized, calling controller menu function')
     controller.main_menu()
 
 

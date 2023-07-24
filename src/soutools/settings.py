@@ -3,6 +3,7 @@
 """Used to create settings file if not exists and get settings"""
 
 import os
+
 import tomlkit
 
 
@@ -75,19 +76,19 @@ input_file = 'soutools/output/myssid.txt'
 
 [radius_servers]
 servers = [
-"radius1.company.com",
-"radius2.company.com",
-"radius3.company.com"]
+'radius1.company.com',
+'radius2.company.com',
+'radius3.company.com']
 port = 1812
-secret = "mySecret"
+secret = 'mySecret'
 
 [radius_accounting]
 servers = [
-"radius1.company.com",
-"radius2.company.com",
-"radius3.company.com"]
+'radius1.company.com',
+'radius2.company.com',
+'radius3.company.com']
 port = 1813
-secret = "mySecret"
+secret = 'mySecret'
 
 # Overall settings
 [logging]

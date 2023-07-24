@@ -7,14 +7,11 @@ import os
 import sys
 
 import meraki
-from rich.progress import Progress
-from rich.console import Console
 
 from soutools import helpers
 
 logger = logging.getLogger(__name__)
-logger.info("Loading settings for the dashboard instance")
-console = Console()
+logger.info('Loading settings for the dashboard instance')
 
 
 class MerakiModel:
@@ -121,7 +118,7 @@ class MerakiModel:
             for ssid in ssids:
                 if (ssid['name'] == search_ssid and ssid['enabled'] == True and ssid['authMode'] == '8021x-radius'):
                     found_ssid = True
-                    newline = f"{site_id},{site_name},{ssid['name']},{ssid['number']}\n"
+                    newline = f'{site_id},{site_name},{ssid["name"]},{ssid["number"]}\n'
                     ssid_sites.append(newline)
                     logger.info(f'Found SSID {search_ssid} for "{site_name}"')
                     found_count += 1
