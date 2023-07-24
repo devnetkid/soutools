@@ -55,7 +55,8 @@ class MerakiModel:
             organizations = self.dashboard.organizations.getOrganizations()
             logger.debug(f'organizations is equal to {organizations}')
         except meraki.exceptions.APIError:
-            sys.exit('Check network connection and/or DNS settings.')
+        
+            sys.exit('Check network settings and verify API Key')
         counter = 1
         print('  Organizations to choose from:\n')
         for organization in organizations:
@@ -111,7 +112,7 @@ class MerakiModel:
             print(bar, end='', flush=True)
             site = network.split(',')
             site_id = site[0]
-            site_name = site[1].strip('\n')
+            site_name = site[1]
             logger.debug(f'Calling Meraki dashboard to pull all SSIDs for network {site_id}')
             ssids = self.dashboard.wireless.getNetworkWirelessSsids(site_id)
             found_ssid = False

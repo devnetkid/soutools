@@ -65,9 +65,12 @@ def validate_integer_in_range(end_range):
 
 def get_networks_list(path):
     filepath = os.path.join(home_dir, path)
+    networks = []
     try:
         with open(filepath, 'r') as netdata:
-            networks = netdata.readlines()
+            for line in netdata:
+                if not line.isspace():
+                    networks.append(line.strip())
         return networks
     except FileNotFoundError:
         logger.error(f'Could not open {path}')
