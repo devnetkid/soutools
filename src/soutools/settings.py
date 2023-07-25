@@ -74,13 +74,29 @@ output_file = 'soutools/output/myssid.txt'
 [radius]
 input_file = 'soutools/output/myssid.txt'
 
+#------------------------------------------------------------------------------------#
+# For both radius and accounting servers you can use any of the following formats:
+# First format looks like this... (where the values are seperated by a semicolon)
+#   servers = ['radius1.com;1812;firstSecret','radius2.com;1912;secondSecret']
+#   ports = ''
+#   secret = ''
+# if using this format leave port and secret set as empty strings.
+#
+# The second format is for when the port and secret are the same for either
+# the radius or accounting servers.
+# Second scenario would like this...
+#   servers = ['radius1.com','radius2.com']
+#   port = 1812
+#   secret = 'mysecret'
+#------------------------------------------------------------------------------------#
+
 [radius_servers]
 servers = [
-'radius1.company.com',
-'radius2.company.com',
-'radius3.company.com']
-port = 1812
-secret = 'mySecret'
+'radius1.company.com;1812;firstSecret',
+'radius2.company.com;1912;secondSecret',
+'radius3.company.com;2012;thirdSecret']
+port = ''
+secret = ''
 
 [radius_accounting]
 servers = [

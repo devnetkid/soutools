@@ -39,7 +39,7 @@ def wireless_options():
     wireless_menu = menu.Menu(
     menu_title, [
     ('Generate a report of all sites of type wireless', wireless_report),
-    ('Generate a report of all sites with a particular SSID', wireless_with_ssid_x_report),
+    ('Generate a report of all sites with a particular SSID', wireless_report_with_ssid_number),
     ('Update radius servers for a particular SSID', update_radius_settings),
     ('Return to the main menu', main_menu),
     ('Exit', quit)])
@@ -58,9 +58,9 @@ def wireless_report():
     input('Press [ENTER] to continue...')
 
 
-def wireless_with_ssid_x_report():
+def wireless_report_with_ssid_number():
     logger.debug('The "wireless_with_ssid_x_report" function called')
-    dashboard.wheres_ssid_x()
+    dashboard.find_ssid_number()
     input('Press [ENTER] to continue...')
 
 
@@ -71,6 +71,7 @@ def update_radius_settings():
 
 
 def quit():
+    helpers.clear_screen()
     sys.exit()
 
 

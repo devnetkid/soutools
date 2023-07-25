@@ -78,25 +78,41 @@ def get_networks_list(path):
 
 
 def format_radius():
+    # Retrieve settings 
     radius = get_settings.get_value('radius_servers')
     accounting = get_settings.get_value('radius_accounting')
     radius_port = radius['port']
     radius_secret = radius['secret']
     accounting_port = accounting['port']
     accounting_secret = accounting['secret']
-
+    # Initialize payloads
     radius_payload = []
     accounting_payload = []
-
     # Format Radius settings
-    for server in radius['servers']:
-        temp = {'host':server, 'port':radius_port, 'secret':radius_secret}
-        radius_payload.append(temp)
-    # Format Radius Accounting settings
-    for server in accounting['servers']:
-        temp = {'host':server, 'port':accounting_port, 'secret':accounting_secret}
-        accounting_payload.append(temp)
-
+    if radius_port and radius_secret:
+        for server in radius['servers']:
+            temp = {'host':server, 'port':radius_port, 'secret':radius_secret}
+            radius_payload.append(temp)
+    else:
+        for server in radius['servers']:
+            server_info = server.split(';')
+            temp = {'host':server_info[0], 
+                'port':int(server_info[1]), 
+                'secret':server_info[2]}
+            radius_payload.append(temp)
+    # Format Accounting settings
+    if accounting_port and accounting_secret:
+        for server in accounting['servers']:
+            temp = {'host':server, 'port':accounting_port, 'secret':accounting_secret}
+            accounting_payload.append(temp)
+    else:
+        for server in accounting['servers']:
+            server_info = server.split(';')
+            temp = {'host':server_info[0], 
+                'port':int(server_info[1]), 
+                'secret':server_info[2]}
+            accounting_payload.append(temp)
+    # Return the formatted payloads
     return radius_payload, accounting_payload
 
 

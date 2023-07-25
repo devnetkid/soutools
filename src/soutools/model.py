@@ -93,7 +93,7 @@ class MerakiModel:
         return wireless_networks
 
 
-    def wheres_ssid_x(self):
+    def find_ssid_number(self):
         logger.debug('The "wheres_ssid" function called')
         search_ssid = helpers.get_settings.get_value('networks_with_ssid.ssid')
         input_file = helpers.get_settings.get_value('networks_with_ssid.input_file')
@@ -142,9 +142,9 @@ class MerakiModel:
         input_file = helpers.get_settings.get_value('radius.input_file')
         networks = helpers.get_networks_list(input_file)
         radius, accounting = helpers.format_radius()
-        logger.debug(f'We are searching for networks "{networks}"')
-        logger.debug(f'We are searching for radius servers "{radius}"')
-        logger.debug(f'We are searching for accounting servers "{accounting}"')
+        logger.debug(f'Searching for networks "{networks}"')
+        logger.debug(f'Searching for radius servers "{radius}"')
+        logger.debug(f'Searching for accounting servers "{accounting}"')
         
         progress = 0
         total = len(networks)
@@ -154,15 +154,15 @@ class MerakiModel:
             site = network.split(',')
             net_id = site[0]
             net_name = site[1]
-            ssid_num = site[3].strip('\n')
+            ssid_num = site[3]
             logger.info(f'Updating radius settings for {net_name} and SSID number {ssid_num}')
             logger.debug(f'Calling Meraki dashboard with {net_id} {ssid_num} {radius} {accounting}')
-            self.dashboard.wireless.updateNetworkWirelessSsid(
-                networkId=net_id,
-                number=ssid_num, 
-                radiusServers=radius,
-                radiusAccountingServers=accounting
-            )
+            #self.dashboard.wireless.updateNetworkWirelessSsid(
+            #    networkId=net_id,
+            #    number=ssid_num, 
+            #    radiusServers=radius,
+            #    radiusAccountingServers=accounting
+            #)
             progress += 1
             print('\b' * len(bar), end='', flush=True)
         logger.info(f'Updated radius settings on {progress} SSIDs')
