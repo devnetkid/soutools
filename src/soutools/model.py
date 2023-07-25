@@ -157,12 +157,12 @@ class MerakiModel:
             ssid_num = site[3]
             logger.info(f'Updating radius settings for {net_name} and SSID number {ssid_num}')
             logger.debug(f'Calling Meraki dashboard with {net_id} {ssid_num} {radius} {accounting}')
-            #self.dashboard.wireless.updateNetworkWirelessSsid(
-            #    networkId=net_id,
-            #    number=ssid_num, 
-            #    radiusServers=radius,
-            #    radiusAccountingServers=accounting
-            #)
+            self.dashboard.wireless.updateNetworkWirelessSsid(
+                networkId=net_id,
+                number=ssid_num, 
+                radiusServers=radius,
+                radiusAccountingServers=accounting
+            )
             progress += 1
             print('\b' * len(bar), end='', flush=True)
         logger.info(f'Updated radius settings on {progress} SSIDs')
