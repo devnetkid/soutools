@@ -55,8 +55,8 @@ class MerakiModel:
             organizations = self.dashboard.organizations.getOrganizations()
             logger.debug(f'organizations is equal to {organizations}')
         except meraki.exceptions.APIError:
-        
             sys.exit('Check network settings and verify API Key')
+        organizations.sort(key=lambda x: x["name"])
         counter = 1
         print('  Organizations to choose from:\n')
         for organization in organizations:

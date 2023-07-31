@@ -28,8 +28,9 @@ def view_organization():
         print('\nYou have not selected an organization yet\n')
         logger.debug('Notified user that organization name is not set')
     else:
-        blue_highlight = helpers.colorme(org_name, 'blue')
-        print(f'\nThe "{blue_highlight}" organization is currently selected\n')
+        highlight_orgname = helpers.colorme(org_name, 'blue')
+        highlight_orgid = helpers.colorme(org_id, 'blue')
+        print(f'\nThe "{highlight_orgname}" organization with ID {highlight_orgid} is currently selected\n')
         logger.debug(f'Notified user that organization name is set to {org_name}')
     input('Press [ENTER] to continue...')
 
@@ -65,9 +66,19 @@ def wireless_report_with_ssid_number():
 
 
 def update_radius_settings():
+    make_changes = 'n'
     logger.debug('The "update_radius_settings" function called')
-    dashboard.update_radius_servers()
-    input('Press [ENTER] to continue...')
+    warning = helpers.colorme('WARNING', 'red')
+    highlight_orgname = helpers.colorme(org_name, 'blue')
+    print(f'{warning} - You are about to make changes to the {highlight_orgname} organizaiton')
+    make_changes = input('Are you sure you want to continue [Y/N] ').upper()
+    if 'Y' in make_changes:
+        print()
+        dashboard.update_radius_servers()
+        input('Press [ENTER] to continue...')
+    else:
+        wireless_options()
+    
 
 
 def quit():
