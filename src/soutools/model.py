@@ -119,7 +119,7 @@ class MerakiModel:
             for ssid in ssids:
                 if (ssid['name'] == search_ssid):
                     found_ssid = True
-                    newline = f'{site_id},{site_name},{ssid["name"]},{ssid["number"]}\n'
+                    newline = f'{site_id},{site_name},{ssid["name"]},{ssid["number"]},{ssid["enabled"]}\n'
                     ssid_sites.append(newline)
                     logger.info(f'Found SSID {search_ssid} for "{site_name}"')
                     found_count += 1
