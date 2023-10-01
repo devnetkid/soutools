@@ -118,7 +118,6 @@ class MerakiModel:
             found_ssid = False
             for ssid in ssids:
                 if (ssid['name'] == search_ssid):
-                    print(ssid)
                     found_ssid = True
                     newline = f'{site_id},{site_name},{ssid["name"]},{ssid["number"]}\n'
                     ssid_sites.append(newline)
