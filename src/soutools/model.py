@@ -188,11 +188,11 @@ class MerakiModel:
             ssid_name = site[2]
             ssid_num = site[3]
             logger.info(f'Changing status for {site_name} ssid {ssid_name} to {status}')
-            #self.dashboard.wireless.updateNetworkWirelessSsid(
-            #    networkId=site_id,
-            #    number=ssid_num, 
-            #    enabled=ssid_enabled
-            #)
+            self.dashboard.wireless.updateNetworkWirelessSsid(
+                networkId=site_id,
+                number=ssid_num, 
+                enabled=ssid_enabled
+            )
             progress += 1
             print('\b' * len(bar), end='', flush=True)
         bar = helpers.progress_bar(progress, total)
