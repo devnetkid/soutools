@@ -104,7 +104,7 @@ class MerakiModel:
         logger.debug(f'Writting to path "{path}"')
         progress = found_count = not_found_count = 0 
         total = len(networks)
-        logger.info(f'The total networks is {total}')
+        logger.info(f'The total number of networks is {total}')
         ssid_sites = []
         print()
         for network in networks:
@@ -166,6 +166,35 @@ class MerakiModel:
             progress += 1
             print('\b' * len(bar), end='', flush=True)
         logger.info(f'Updated radius settings on {progress} SSIDs')
+        bar = helpers.progress_bar(progress, total)
+        print(bar, end='', flush=True)
+        print('\n')
+
+
+    def enable_disable_paticular_ssid(self, ssid_enabled):
+        logger.debug('The "enable_disable_paticular_ssid" function called')
+        status = 'enabled' if ssid_enabled else 'disabled'
+        input_file = helpers.get_settings.get_value('ssid_enabled_status.input_file')
+        networks = helpers.get_networks_list(input_file)
+        progress = 0 
+        total = len(networks)
+        print()
+        for network in networks:
+            bar = helpers.progress_bar(progress, total)
+            print(bar, end='', flush=True)
+            site = network.split(',')
+            site_id = site[0]
+            site_name = site[1]
+            ssid_name = site[2]
+            ssid_num = site[3]
+            logger.info(f'Changing status for {site_name} ssid {ssid_name} to {status}')
+            #self.dashboard.wireless.updateNetworkWirelessSsid(
+            #    networkId=site_id,
+            #    number=ssid_num, 
+            #    enabled=ssid_enabled
+            #)
+            progress += 1
+            print('\b' * len(bar), end='', flush=True)
         bar = helpers.progress_bar(progress, total)
         print(bar, end='', flush=True)
         print('\n')

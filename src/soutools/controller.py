@@ -42,6 +42,7 @@ def wireless_options():
     ('Generate a report of all sites of type wireless', wireless_report),
     ('Generate a report of all sites with a particular SSID', wireless_report_with_ssid_number),
     ('Update radius servers for a particular SSID', update_radius_settings),
+    ('Enable/Disable all sites with a particular SSID', enable_disable_ssid),
     ('Return to the main menu', main_menu),
     ('Exit', quit)])
     while True:
@@ -79,6 +80,48 @@ def update_radius_settings():
     else:
         wireless_options()
     
+
+def enable_disable_ssid():
+    ssid = helpers.get_settings.get_value('networks_with_ssid.ssid')
+    menu_title = helpers.menu_title
+    main_menu = menu.Menu(
+    menu_title, [
+    (f'Enable ssid "{ssid}" in the "{org_name}" org', enable_sites_with_ssid),
+    (f'Disable ssid "{ssid}" in the "{org_name}" org', disable_sites_with_ssid),
+    ('Return to wireless options', wireless_options),
+    ('Exit', quit)])
+    while True:
+        main_menu.get_input()
+
+
+def enable_sites_with_ssid():
+    make_changes = 'n'
+    logger.debug('The "enable_sites_with_ssid" function called')
+    warning = helpers.colorme('WARNING', 'red')
+    highlight_orgname = helpers.colorme(org_name, 'blue')
+    print(f'{warning} - You are about to make changes to the {highlight_orgname} organizaiton')
+    make_changes = input('Are you sure you want to continue [Y/N] ').upper()
+    if 'Y' in make_changes:
+        print()
+        dashboard.enable_disable_paticular_ssid(True)
+        input('Press [ENTER] to continue...')
+    else:
+        enable_disable_ssid()
+
+
+def disable_sites_with_ssid():
+    make_changes = 'n'
+    logger.debug('The "enable_sites_with_ssid" function called')
+    warning = helpers.colorme('WARNING', 'red')
+    highlight_orgname = helpers.colorme(org_name, 'blue')
+    print(f'{warning} - You are about to make changes to the {highlight_orgname} organizaiton')
+    make_changes = input('Are you sure you want to continue [Y/N] ').upper()
+    if 'Y' in make_changes:
+        print()
+        dashboard.enable_disable_paticular_ssid(False)
+        input('Press [ENTER] to continue...')
+    else:
+        enable_disable_ssid()
 
 
 def quit():

@@ -118,10 +118,10 @@ def format_radius():
 
 def progress_bar(progress, total, width=40):
     char = chr(9632)
-    logger.info(f'progress is {progress}')
-    logger.info(f'total is {total}')
+    logger.debug(f'progress is {progress}')
+    logger.debug(f'total is {total}')
     if progress >= total:
-        logger.info('finished has been set to true')
+        logger.debug('finished has been set to true')
         fill_char = colorme(char, 'green')
     else:
         fill_char = colorme(char, 'red')
