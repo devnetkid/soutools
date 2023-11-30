@@ -43,6 +43,7 @@ def select_network():
     # Make sure org has been defined as network depends on it
     if not org_id:
         print('Please choose an organization first')
+        input('Press [ENTER] to continue...')
     else:
         net_id, net_name = dashboard.select_network(org_id)
         logger.debug(f'The selected network ID is "{net_id}"')
