@@ -57,17 +57,63 @@ class MerakiModel:
         except meraki.exceptions.APIError:
             sys.exit('Check network settings and verify API Key')
         organizations.sort(key=lambda x: x["name"])
-        counter = 1
         print('  Organizations to choose from:\n')
-        for organization in organizations:
-            name = helpers.colorme(f"{str(counter)} - {organization['name']}", 'green')
+        for line_num, organization in enumerate(organizations, start=1):
+            name = helpers.colorme(f"{line_num} - {organization['name']}", 'green')
             print(f'    {name}')
-            counter += 1
-        selected = helpers.validate_integer_in_range(counter)
+        selected = helpers.validate_integer_in_range(len(organizations))
         return (
-            organizations[int(selected) - 1]['id'],
-            organizations[int(selected) - 1]['name']
+            organizations[int(selected)]['id'],
+            organizations[int(selected)]['name']
         )
+
+
+    def select_network(self, org, lines_to_display=25):
+        """Lists the organization networks and prompts user to select one
+
+        Args:
+            dashboard (obj): The Meraki dashboard instance
+            org (str): The selected organization ID
+            lines_to_display (int): The number of lines before pausing
+
+        Returns:
+            list: the selected network ID and network name
+        """
+
+        network_list = []
+        try:
+            logger.debug('Trying to get networks from the Meraki dashboard')
+            networks = self.dashboard.organizations.getOrganizationNetworks(org)
+        except Exception as err:
+            logger.debug(f'Error while trying to get organization networks for org ID {org}')
+            logger.debug(err.__traceback__)
+            sys.exit('Error retieving networks')
+
+        while not network_list:
+            search_name = input("Enter a name to search for or leave blank for all networks: ")
+            if search_name:
+                for network in networks:
+                    if search_name.lower() in network['name'].lower():
+                        network_list.append(network)
+            else:
+                network_list = networks
+            if network_list:
+                network_list.sort(key=lambda x: x["name"])
+                print("\nNetworks:")
+                for line_num, net in enumerate(network_list, start=1):
+                    net_name = net["name"]
+                    print(f"{line_num} - {net_name}")
+                    if line_num % lines_to_display == 0:
+                        user_response = input(
+                            "\nPress Enter to continue, or q + Enter to quit search: "
+                        )
+                        if "q" in user_response:
+                            break
+            else:
+                print(f"No networks found matching {search_name}")
+
+        selected = helpers.validate_integer_in_range(len(network_list))
+        return ([network_list[int(selected)]["id"], network_list[int(selected)]["name"]])
 
 
     def get_wireless_networks(self, organization_id):

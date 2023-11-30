@@ -57,6 +57,9 @@ toml_template = """# settings.toml
 default_org_id = ''
 default_org_name = ''
 
+default_net_id = ''
+default_net_name = ''
+
 # Section 3.1 settings 
 # Generate a report of all sites of type wireless
 [wireless_networks]

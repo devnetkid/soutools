@@ -11,6 +11,8 @@ logger = logging.getLogger(__name__)
 dashboard = model.MerakiModel()
 org_id = helpers.get_settings.get_value('default_org_id')
 org_name = helpers.get_settings.get_value('default_org_name')
+net_id = helpers.get_settings.get_value('default_net_id')
+net_name = helpers.get_settings.get_value('default_net_name')
 
 
 def select_organization():
@@ -32,6 +34,32 @@ def view_organization():
         highlight_orgid = helpers.colorme(org_id, 'blue')
         print(f'\nThe "{highlight_orgname}" organization with ID {highlight_orgid} is currently selected\n')
         logger.debug(f'Notified user that organization name is set to {org_name}')
+    input('Press [ENTER] to continue...')
+
+
+def select_network():
+    global net_id, net_name
+    logger.debug('The "select_network" function called')
+    # Make sure org has been defined as network depends on it
+    if not org_id:
+        print('Please choose an organization first')
+    else:
+        net_id, net_name = dashboard.select_network(org_id)
+        logger.debug(f'The selected network ID is "{net_id}"')
+        logger.info(f'The selected network name is "{net_name}"')
+
+
+def view_network():
+    logger.debug('The "view_network" function called')
+    logger.debug('Checking if network name is set')
+    if not net_name:
+        print('\nYou have not selected a network yet\n')
+        logger.debug('Notified user that network name is not set')
+    else:
+        highlight_netname = helpers.colorme(net_name, 'blue')
+        highlight_netid = helpers.colorme(net_id, 'blue')
+        print(f'\nThe "{highlight_netname}" network with ID {highlight_netid} is currently selected\n')
+        logger.debug(f'Notified user that network name is set to {net_name}')
     input('Press [ENTER] to continue...')
 
 
@@ -135,6 +163,8 @@ def main_menu():
     menu_title, [
     ('Select an organization', select_organization),
     ('View the selected organization', view_organization),
+    ('Select an network', select_network),
+    ('View the selected network', view_network),
     ('Wireless options', wireless_options),
     ('Exit', quit)])
     while True:
