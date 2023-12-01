@@ -67,6 +67,32 @@ def view_network():
     input('Press [ENTER] to continue...')
 
 
+def policy_options():
+    menu_title = helpers.menu_title
+    policy_menu = menu.Menu(
+    menu_title, [
+    ('Check for existing group policies', policy_report),
+    ('View a particular group policy', wireless_report_with_ssid_number),
+    ('Copy group policy to all listed locations', update_radius_settings),
+    ('Delete a particular group policy', enable_disable_ssid),
+    ('Return to the main menu', main_menu),
+    ('Exit', quit)])
+    while True:
+        policy_menu.get_input()
+
+
+def policy_report():
+    logger.debug('The "policy_report" function called')
+    # Requires the network ID be set
+    if not net_id:
+        print('\nYou have not selected a network yet\n')
+        logger.debug('Notified user that network name is not set')
+    else:
+        dashboard.get_group_policies(net_id)
+        print()
+    input('Press [ENTER] to continue...')
+
+
 def wireless_options():
     menu_title = helpers.menu_title
     wireless_menu = menu.Menu(
@@ -169,6 +195,7 @@ def main_menu():
     ('View the selected organization', view_organization),
     ('Select an network', select_network),
     ('View the selected network', view_network),
+    ('Group Policy options', policy_options),
     ('Wireless options', wireless_options),
     ('Exit', quit)])
     while True:

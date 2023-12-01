@@ -117,6 +117,15 @@ class MerakiModel:
             return ('','')
 
 
+    def get_group_policies(self, netid):
+        logger.debug(f'The "get_group_policies" function called with net_id {netid}')
+        group_policies = self.dashboard.networks.getNetworkGroupPolicies(netid)
+        for gp in group_policies:
+            logger.info(f"Found group policy with name \"{gp['name']}\"")
+            gp_name = helpers.colorme(gp['name'], 'blue')
+            print(f"  Found Policy Name: {gp_name}")
+
+
     def get_wireless_networks(self, organization_id):
         logger.debug(f'The "get_wireless_networks" function called with org_id {organization_id}')
         networks = self.dashboard.organizations.getOrganizationNetworks(
