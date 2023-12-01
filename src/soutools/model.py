@@ -2,6 +2,7 @@
 
 """This module handles the interface between the controller and the Meraki Dashboard"""
 
+import json
 import logging
 import os
 import sys
@@ -124,6 +125,15 @@ class MerakiModel:
             logger.info(f"Found group policy with name \"{gp['name']}\"")
             gp_name = helpers.colorme(gp['name'], 'blue')
             print(f"  Found Policy Name: {gp_name}")
+
+
+    def view_group_policy(self, netid):
+        logger.debug(f'The "view_group_policy" function called with net_id {netid}')
+        policy_name = input('Please enter the name of the group policy to view: ')
+        group_policies = self.dashboard.networks.getNetworkGroupPolicies(netid)
+        for gp in group_policies:
+            if policy_name == gp['name']:
+                print(json.dumps(gp, indent=2))
 
 
     def get_wireless_networks(self, organization_id):

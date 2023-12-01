@@ -5,7 +5,7 @@
 import logging
 import sys
 
-from soutools import menu, model, helpers
+from soutools import helpers, menu, model
 
 logger = logging.getLogger(__name__)
 dashboard = model.MerakiModel()
