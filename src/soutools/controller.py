@@ -46,8 +46,11 @@ def select_network():
         input('Press [ENTER] to continue...')
     else:
         net_id, net_name = dashboard.select_network(org_id)
-        logger.debug(f'The selected network ID is "{net_id}"')
-        logger.info(f'The selected network name is "{net_name}"')
+        if net_id:
+            logger.debug(f'The selected network ID is "{net_id}"')
+            logger.info(f'The selected network name is "{net_name}"')
+        else:
+            input('Press [ENTER] to continue...')
 
 
 def view_network():
