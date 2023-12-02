@@ -114,6 +114,9 @@ def policy_create():
 
 def policy_delete():
     logger.debug('The "policy_delete" function called')
+    dashboard.delete_group_policy(net_id)
+    print()
+    input('Press [ENTER] to continue...')
 
 
 def wireless_options():

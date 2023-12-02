@@ -178,6 +178,15 @@ class MerakiModel:
             logger.info(f"Created group policy {policy_name} for network {network.split(',')[1]}")
 
 
+    def delete_group_policy(self, netid):
+        logger.debug(f'The "delete_group_policy" function called with net_id {netid}')
+        policy_name = input('Please enter the name of the group policy to delete: ')
+        group_policies = self.dashboard.networks.getNetworkGroupPolicies(netid)
+        for gp in group_policies:
+            if policy_name == gp['name']:
+                self.dashboard.networks.deleteNetworkGroupPolicy(netid, gp['groupPolicyId'])
+
+
     def get_wireless_networks(self, organization_id):
         logger.debug(f'The "get_wireless_networks" function called with org_id {organization_id}')
         networks = self.dashboard.organizations.getOrganizationNetworks(
