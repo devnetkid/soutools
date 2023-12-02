@@ -109,6 +109,12 @@ servers = [
 port = 1813
 secret = 'mySecret'
 
+# Creating group policies 
+[group_policies]
+source_network_id = ''
+source_policy_name = ''
+destinations_file = 'soutools/input/mysites.txt'
+
 # Overall settings
 [logging]
 file_log_level = 'info'
