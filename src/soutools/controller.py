@@ -32,7 +32,8 @@ def view_organization():
     else:
         highlight_orgname = helpers.colorme(org_name, 'blue')
         highlight_orgid = helpers.colorme(org_id, 'blue')
-        print(f'\nThe "{highlight_orgname}" organization with ID {highlight_orgid} is currently selected\n')
+        print(f'\nThe "{highlight_orgname}" organization with ID \
+            {highlight_orgid} is currently selected\n')
         logger.debug(f'Notified user that organization name is set to {org_name}')
     input('Press [ENTER] to continue...')
 
@@ -62,7 +63,8 @@ def view_network():
     else:
         highlight_netname = helpers.colorme(net_name, 'blue')
         highlight_netid = helpers.colorme(net_id, 'blue')
-        print(f'\nThe "{highlight_netname}" network with ID {highlight_netid} is currently selected\n')
+        print(f'\nThe "{highlight_netname}" network with ID \
+            {highlight_netid} is currently selected\n')
         logger.debug(f'Notified user that network name is set to {net_name}')
     input('Press [ENTER] to continue...')
 
@@ -107,16 +109,32 @@ def policy_view():
 
 def policy_create():
     logger.debug('The "policy_create" function called')
-    dashboard.create_group_policy()
+    warning = helpers.colorme('WARNING', 'red')
+    highlight_orgname = helpers.colorme(org_name, 'blue')
+    print(f'{warning} - You are about to make changes to the {highlight_orgname} organizaiton')
+    make_changes = input('Are you sure you want to continue [Y/N] ').upper()
+    if 'Y' in make_changes:
+        print()
+        dashboard.create_group_policy()
+        input('Press [ENTER] to continue...')
+    else:
+        policy_options()
     print()
     input('Press [ENTER] to continue...')
 
 
 def policy_delete():
     logger.debug('The "policy_delete" function called')
-    dashboard.delete_group_policy(net_id)
-    print()
-    input('Press [ENTER] to continue...')
+    warning = helpers.colorme('WARNING', 'red')
+    highlight_orgname = helpers.colorme(org_name, 'blue')
+    print(f'{warning} - You are about to make changes to the {highlight_orgname} organizaiton')
+    make_changes = input('Are you sure you want to continue [Y/N] ').upper()
+    if 'Y' in make_changes:
+        print()
+        dashboard.update_radius_servers(net_id)
+        input('Press [ENTER] to continue...')
+    else:
+        policy_options()
 
 
 def wireless_options():

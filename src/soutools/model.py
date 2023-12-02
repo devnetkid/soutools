@@ -153,7 +153,7 @@ class MerakiModel:
     def create_group_policy(self):
         logger.debug(f'The "create_group_policy" function called')
         policy_name = policy_source = destinations = ""
-        # Load values needed to complete this operation or exit program
+        # Load the values needed to complete this operation or exit
         if helpers.get_settings.get_value("group_policies.source_policy_name"):
             policy_name = helpers.get_settings.get_value(
                 "group_policies.source_policy_name"
