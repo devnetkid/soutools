@@ -73,8 +73,8 @@ def policy_options():
     menu_title, [
     ('Check for existing group policies', policy_report),
     ('View a particular group policy', policy_view),
-    ('Copy group policy to all listed locations', update_radius_settings),
-    ('Delete a particular group policy', enable_disable_ssid),
+    ('Create a group policy', policy_create),
+    ('Delete a particular group policy', policy_delete),
     ('Return to the main menu', main_menu),
     ('Exit', quit)])
     while True:
@@ -103,6 +103,17 @@ def policy_view():
         dashboard.view_group_policy(net_id)
         print()
     input('Press [ENTER] to continue...')
+
+
+def policy_create():
+    logger.debug('The "policy_create" function called')
+    dashboard.create_group_policy()
+    print()
+    input('Press [ENTER] to continue...')
+
+
+def policy_delete():
+    logger.debug('The "policy_delete" function called')
 
 
 def wireless_options():

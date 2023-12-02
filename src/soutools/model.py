@@ -140,6 +140,44 @@ class MerakiModel:
                 print(json.dumps(gp, indent=2))
 
 
+    def create_group_policy(self):
+        logger.debug(f'The "create_group_policy" function called')
+        policy_name = policy_source = destinations = ''
+        # Load values needed to complete this operation or exit program
+        if helpers.get_settings.get_value('group_policies.source_policy_name'):
+            policy_name = helpers.get_settings.get_value('group_policies.source_policy_name')
+        if helpers.get_settings.get_value('group_policies.source_network_id'):
+            policy_source = helpers.get_settings.get_value('group_policies.source_network_id')
+        if helpers.get_settings.get_value('group_policies.destinations_file'):
+            destinations = helpers.get_settings.get_value('group_policies.destinations_file')
+        if not policy_name or not policy_source or not destinations:
+            print(helpers.colorme('Error: Missing values needed for operation', 'red'))
+            sys.exit('Please fill out the group_policies section in the settings file')
+        # Pull source policy from specified source network
+        group_policies = self.dashboard.networks.getNetworkGroupPolicies(policy_source)
+        for policy in group_policies:
+            if policy_name == policy['name']:
+                group_policy = policy
+        # Load the destination networks from the specified file
+        networks = helpers.get_networks_list(destinations)
+        # Everything is ready to go. Write the group policy to each requested network
+        for network in networks:
+            self.dashboard.networks.createNetworkGroupPolicy(
+                network.split(',')[0],
+                policy_name,
+                scheduling=group_policy["scheduling"],
+                bandwidth=group_policy["bandwidth"],
+                firewallAndTrafficShaping=group_policy[
+                    "firewallAndTrafficShaping"
+                ],
+                contentFiltering=group_policy["contentFiltering"],
+                splashAuthSettings=group_policy["splashAuthSettings"],
+                vlanTagging=group_policy["vlanTagging"],
+                bonjourForwarding=group_policy["bonjourForwarding"],
+            )
+            logger.info(f"Created group policy {policy_name} for network {network.split(',')[1]}")
+
+
     def get_wireless_networks(self, organization_id):
         logger.debug(f'The "get_wireless_networks" function called with org_id {organization_id}')
         networks = self.dashboard.organizations.getOrganizationNetworks(
