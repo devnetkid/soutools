@@ -188,8 +188,13 @@ class MerakiModel:
             sys.exit("Please ensure that the source policy name is correct")
         # Load the destination networks from the specified file
         networks = helpers.get_networks_list(destinations)
+        # Prepare the progress bar
+        progress = 0
+        total = len(networks)
         # Everything is ready to go. Write the group policy to each requested network
         for network in networks:
+            bar = helpers.progress_bar(progress, total)
+            print(bar, end="", flush=True)
             network_id = network.split(",")[0]
             network_name = network.split(",")[1]
             if not (network_id.startswith('L_') or network_id.startswith('N_')):
@@ -198,24 +203,30 @@ class MerakiModel:
                 print(helpers.colorme("Error: Cannot continue", "red"))
                 sys.exit("Found an invalid network ID, check destinations file")
             try:
-                self.dashboard.networks.createNetworkGroupPolicy(
-                    network_id,
-                    policy_name,
-                    scheduling=group_policy["scheduling"],
-                    bandwidth=group_policy["bandwidth"],
-                    firewallAndTrafficShaping=group_policy["firewallAndTrafficShaping"],
-                    contentFiltering=group_policy["contentFiltering"],
-                    # Wireless only settings for the next three
-                    splashAuthSettings=group_policy["splashAuthSettings"],
-                    vlanTagging=group_policy["vlanTagging"],
-                    bonjourForwarding=group_policy["bonjourForwarding"],
-                )
-                logger.info(
-                    f"Created group policy {policy_name} for network {network_name}"
-                )
+                print(f"Creating group policy for network {network_name}")
+                #self.dashboard.networks.createNetworkGroupPolicy(
+                #    network_id,
+                #    policy_name,
+                #    scheduling=group_policy["scheduling"],
+                #    bandwidth=group_policy["bandwidth"],
+                #    firewallAndTrafficShaping=group_policy["firewallAndTrafficShaping"],
+                #    contentFiltering=group_policy["contentFiltering"],
+                #    # Wireless only settings for the next three
+                #    splashAuthSettings=group_policy["splashAuthSettings"],
+                #    vlanTagging=group_policy["vlanTagging"],
+                #    bonjourForwarding=group_policy["bonjourForwarding"],
+                #)
+                #logger.info(
+                #    f"Created group policy {policy_name} for network {network_name}"
+                #)
             except Exception as api_error:
                 logger.info(f"Failed to write group policy for {network_name}")
                 logger.info(api_error)
+            progress += 1
+            print("\b" * len(bar), end="", flush=True)
+        bar = helpers.progress_bar(progress, total)
+        print(bar, end="", flush=True)
+        print("\n")
 
     def delete_group_policy(self, netid):
         logger.debug(f'The "delete_group_policy" function called with net_id {netid}')
