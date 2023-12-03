@@ -32,8 +32,8 @@ def view_organization():
     else:
         highlight_orgname = helpers.colorme(org_name, 'blue')
         highlight_orgid = helpers.colorme(org_id, 'blue')
-        print(f'\nThe "{highlight_orgname}" organization with ID \
-            {highlight_orgid} is currently selected\n')
+        print(f'\nThe "{highlight_orgname}" organization with ID'\
+            f' {highlight_orgid} is currently selected\n')
         logger.debug(f'Notified user that organization name is set to {org_name}')
     input('Press [ENTER] to continue...')
 
@@ -63,8 +63,8 @@ def view_network():
     else:
         highlight_netname = helpers.colorme(net_name, 'blue')
         highlight_netid = helpers.colorme(net_id, 'blue')
-        print(f'\nThe "{highlight_netname}" network with ID \
-            {highlight_netid} is currently selected\n')
+        print(f'\nThe "{highlight_netname}" network with ID'\
+            f' {highlight_netid} is currently selected\n')
         logger.debug(f'Notified user that network name is set to {net_name}')
     input('Press [ENTER] to continue...')
 
@@ -246,7 +246,7 @@ def main_menu():
     menu_title, [
     ('Select an organization', select_organization),
     ('View the selected organization', view_organization),
-    ('Select an network', select_network),
+    ('Select a network', select_network),
     ('View the selected network', view_network),
     ('Group Policy options', policy_options),
     ('Wireless options', wireless_options),

@@ -273,7 +273,6 @@ class MerakiModel:
             f"INFO: There are {wireless} sites with some type of wireless device"
         )
         logger.info(f"INFO: There were {no_wireless} sites with no wireless")
-
         return wireless_networks
 
     def find_ssid_number(self):
@@ -330,7 +329,6 @@ class MerakiModel:
         logger.debug(f'Searching for networks "{networks}"')
         logger.debug(f'Searching for radius servers "{radius}"')
         logger.debug(f'Searching for accounting servers "{accounting}"')
-
         progress = 0
         total = len(networks)
         for network in networks:
@@ -344,15 +342,19 @@ class MerakiModel:
                 f"Updating radius settings for {net_name} and SSID number {ssid_num}"
             )
             logger.debug(
-                f"Calling Meraki dashboard with \
-                {net_id} {ssid_num} {radius} {accounting}"
+                f"Calling Meraki dashboard with"\
+                f"{net_id} {ssid_num} {radius} {accounting}"
             )
-            self.dashboard.wireless.updateNetworkWirelessSsid(
-                networkId=net_id,
-                number=ssid_num,
-                radiusServers=radius,
-                radiusAccountingServers=accounting,
-            )
+            try:
+                self.dashboard.wireless.updateNetworkWirelessSsid(
+                    networkId=net_id,
+                    number=ssid_num,
+                    radiusServers=radius,
+                    radiusAccountingServers=accounting,
+                )
+            except Exception as api_error:
+                logger.info(f"Failed to update SSID for {net_name}")
+                logger.debug(api_error)
             progress += 1
             print("\b" * len(bar), end="", flush=True)
         logger.info(f"Updated radius settings on {progress} SSIDs")
@@ -377,9 +379,13 @@ class MerakiModel:
             ssid_name = site[2]
             ssid_num = site[3]
             logger.info(f"Changing status for {site_name} ssid {ssid_name} to {status}")
-            self.dashboard.wireless.updateNetworkWirelessSsid(
-                networkId=site_id, number=ssid_num, enabled=ssid_enabled
-            )
+            try:
+                self.dashboard.wireless.updateNetworkWirelessSsid(
+                    networkId=site_id, number=ssid_num, enabled=ssid_enabled
+                )
+            except Exception as api_error:
+                logger.info(f"Failed to update SSID for {site_name}")
+                logger.debug(api_error)
             progress += 1
             print("\b" * len(bar), end="", flush=True)
         bar = helpers.progress_bar(progress, total)
