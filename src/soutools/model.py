@@ -182,7 +182,7 @@ class MerakiModel:
             if policy_name == policy["name"]:
                 group_policy = policy
         if not group_policy:
-            logger.info(f"Specified policy name {policy_name} was not found.")
+            logger.info(f"Specified source policy name {policy_name} was not found.")
             logger.info("Please ensure that the source policy name is correct")
             print(helpers.colorme("Error: Cannot continue", "red"))
             sys.exit("Please ensure that the source policy name is correct")
@@ -190,9 +190,16 @@ class MerakiModel:
         networks = helpers.get_networks_list(destinations)
         # Everything is ready to go. Write the group policy to each requested network
         for network in networks:
+            network_id = network.split(",")[0]
+            network_name = network.split(",")[1]
+            if not (network_id.startswith('L_') or network_id.startswith('N_')):
+                logger.info("Check the destination input file for errors")
+                logger.info(f"The network ID {network_id} is incorrect")
+                print(helpers.colorme("Error: Cannot continue", "red"))
+                sys.exit("Found an invalid network ID, check destinations file")
             try:
                 self.dashboard.networks.createNetworkGroupPolicy(
-                    network.split(",")[0],
+                    network_id,
                     policy_name,
                     scheduling=group_policy["scheduling"],
                     bandwidth=group_policy["bandwidth"],
@@ -204,10 +211,10 @@ class MerakiModel:
                     bonjourForwarding=group_policy["bonjourForwarding"],
                 )
                 logger.info(
-                    f"Created group policy {policy_name} for network {network.split(',')[1]}"
+                    f"Created group policy {policy_name} for network {network_name}"
                 )
             except Exception as api_error:
-                logger.info(f"Failed to write group policy for {network.split(',')[1]}")
+                logger.info(f"Failed to write group policy for {network_name}")
                 logger.info(api_error)
 
     def delete_group_policy(self, netid):
