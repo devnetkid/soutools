@@ -203,22 +203,22 @@ class MerakiModel:
                 print(helpers.colorme("Error: Cannot continue", "red"))
                 sys.exit("Found an invalid network ID, check destinations file")
             try:
-                print(f"Creating group policy for network {network_name}")
-                #self.dashboard.networks.createNetworkGroupPolicy(
-                #    network_id,
-                #    policy_name,
-                #    scheduling=group_policy["scheduling"],
-                #    bandwidth=group_policy["bandwidth"],
-                #    firewallAndTrafficShaping=group_policy["firewallAndTrafficShaping"],
-                #    contentFiltering=group_policy["contentFiltering"],
-                #    # Wireless only settings for the next three
-                #    splashAuthSettings=group_policy["splashAuthSettings"],
-                #    vlanTagging=group_policy["vlanTagging"],
-                #    bonjourForwarding=group_policy["bonjourForwarding"],
-                #)
-                #logger.info(
-                #    f"Created group policy {policy_name} for network {network_name}"
-                #)
+                logger.debug(f"Creating group policy for network {network_name}")
+                self.dashboard.networks.createNetworkGroupPolicy(
+                    network_id,
+                    policy_name,
+                    scheduling=group_policy["scheduling"],
+                    bandwidth=group_policy["bandwidth"],
+                    firewallAndTrafficShaping=group_policy["firewallAndTrafficShaping"],
+                    contentFiltering=group_policy["contentFiltering"],
+                    # Wireless only settings for the next three
+                    splashAuthSettings=group_policy["splashAuthSettings"],
+                    vlanTagging=group_policy["vlanTagging"],
+                    bonjourForwarding=group_policy["bonjourForwarding"],
+                )
+                logger.info(
+                    f"Group policy {policy_name} created for network {network_name}"
+                )
             except Exception as api_error:
                 logger.info(f"Failed to write group policy for {network_name}")
                 logger.info(api_error)
