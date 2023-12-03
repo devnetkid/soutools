@@ -131,10 +131,11 @@ class MerakiModel:
             return ("", "")
 
     def get_group_policies(self, netid):
-        logger.debug(f'The "get_group_policies" function called with net_id {netid}')
+        logger.debug(f'The "get_group_policies" function called with network ID {netid}')
         group_policies = []
         group_policies = self.dashboard.networks.getNetworkGroupPolicies(netid)
         if not group_policies:
+            logger.info(f"No group policies found for network ID {netid}")
             net_id = helpers.colorme(netid, "blue")
             print(f"  No group policies found for network ID {net_id}")
         for gp in group_policies:
@@ -149,6 +150,9 @@ class MerakiModel:
         for gp in group_policies:
             if policy_name == gp["name"]:
                 print(json.dumps(gp, indent=2))
+                return True
+        logger.info(f"The specified group policy \"{policy_name}\" was not found")
+        return False
 
     def create_group_policy(self):
         logger.debug(f'The "create_group_policy" function called')

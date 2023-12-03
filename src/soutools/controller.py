@@ -73,8 +73,8 @@ def policy_options():
     menu_title = helpers.menu_title
     policy_menu = menu.Menu(
     menu_title, [
-    ('Check for existing group policies', policy_report),
-    ('View a particular group policy', policy_view),
+    ('Check a site for existing group policies', policy_report),
+    ('View a particular group policy for a site', policy_view),
     ('Create a group policy', policy_create),
     ('Delete a particular group policy', policy_delete),
     ('Return to the main menu', main_menu),
@@ -102,7 +102,9 @@ def policy_view():
         print('\nYou have not selected a network yet\n')
         logger.debug('Notified user that network name is not set')
     else:
-        dashboard.view_group_policy(net_id)
+        result = dashboard.view_group_policy(net_id)
+        if not result:
+            print("Specified policy was not found")
         print()
     input('Press [ENTER] to continue...')
 
