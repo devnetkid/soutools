@@ -120,8 +120,6 @@ def policy_create():
         input('Press [ENTER] to continue...')
     else:
         policy_options()
-    print()
-    input('Press [ENTER] to continue...')
 
 
 def policy_delete():
@@ -138,7 +136,7 @@ def policy_delete():
         make_changes = input('Are you sure you want to continue [Y/N] ').upper()
         if 'Y' in make_changes:
             print()
-            result = dashboard.update_radius_servers(net_id)
+            result = dashboard.delete_group_policy(net_id)
             if not result:
                 warning = helpers.colorme('WARNING', 'red')
                 print(f"{warning} Failed to delete the specified policy.")
