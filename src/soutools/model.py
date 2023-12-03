@@ -219,6 +219,11 @@ class MerakiModel:
                 self.dashboard.networks.deleteNetworkGroupPolicy(
                     netid, gp["groupPolicyId"]
                 )
+                logger.info(f"Successfully deleted group policy with name {policy_name}")
+                return True
+        logger.info(f"Failed to delete group policy with name {policy_name}")
+        logger.info("Please confirm that the name is correct and try again.")
+        return False
 
     def get_wireless_networks(self, organization_id):
         logger.debug(

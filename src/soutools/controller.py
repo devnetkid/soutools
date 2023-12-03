@@ -105,8 +105,7 @@ def policy_view():
         result = dashboard.view_group_policy(net_id)
         if not result:
             print("Specified policy was not found")
-        print()
-    input('Press [ENTER] to continue...')
+    input('\nPress [ENTER] to continue...')
 
 
 def policy_create():
@@ -127,16 +126,26 @@ def policy_create():
 
 def policy_delete():
     logger.debug('The "policy_delete" function called')
-    warning = helpers.colorme('WARNING', 'red')
-    highlight_orgname = helpers.colorme(org_name, 'blue')
-    print(f'{warning} - You are about to make changes to the {highlight_orgname} organizaiton')
-    make_changes = input('Are you sure you want to continue [Y/N] ').upper()
-    if 'Y' in make_changes:
-        print()
-        dashboard.update_radius_servers(net_id)
+    # Requires the network ID be set
+    if not net_id:
+        print('\nYou have not selected a network yet\n')
+        logger.debug('Notified user that network name is not set')
         input('Press [ENTER] to continue...')
     else:
-        policy_options()
+        warning = helpers.colorme('WARNING', 'red')
+        highlight_orgname = helpers.colorme(org_name, 'blue')
+        print(f'{warning} - You are about to make changes to the {highlight_orgname} organizaiton')
+        make_changes = input('Are you sure you want to continue [Y/N] ').upper()
+        if 'Y' in make_changes:
+            print()
+            result = dashboard.update_radius_servers(net_id)
+            if not result:
+                warning = helpers.colorme('WARNING', 'red')
+                print(f"{warning} Failed to delete the specified policy.")
+                print("Please confirm that the name is correct and try again.")
+            input('Press [ENTER] to continue...')
+        else:
+            policy_options()
 
 
 def wireless_options():
