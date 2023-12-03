@@ -156,6 +156,7 @@ class MerakiModel:
 
     def create_group_policy(self):
         logger.debug(f'The "create_group_policy" function called')
+        group_policy = []
         policy_name = policy_source = destinations = ""
         # Load the values needed to complete this operation or exit
         if helpers.get_settings.get_value("group_policies.source_policy_name"):
@@ -171,6 +172,8 @@ class MerakiModel:
                 "group_policies.destinations_file"
             )
         if not policy_name or not policy_source or not destinations:
+            logger.info("Missing some values that are needed for create operation")
+            logger.info("Please confirm group_policies section in settings.toml file")
             print(helpers.colorme("Error: Missing values needed for operation", "red"))
             sys.exit("Please fill out the group_policies section in the settings file")
         # Pull source policy from specified source network
@@ -178,24 +181,34 @@ class MerakiModel:
         for policy in group_policies:
             if policy_name == policy["name"]:
                 group_policy = policy
+        if not group_policy:
+            logger.info(f"Specified policy name {policy_name} was not found.")
+            logger.info("Please ensure that the source policy name is correct")
+            print(helpers.colorme("Error: Cannot continue", "red"))
+            sys.exit("Please ensure that the source policy name is correct")
         # Load the destination networks from the specified file
         networks = helpers.get_networks_list(destinations)
         # Everything is ready to go. Write the group policy to each requested network
         for network in networks:
-            self.dashboard.networks.createNetworkGroupPolicy(
-                network.split(",")[0],
-                policy_name,
-                scheduling=group_policy["scheduling"],
-                bandwidth=group_policy["bandwidth"],
-                firewallAndTrafficShaping=group_policy["firewallAndTrafficShaping"],
-                contentFiltering=group_policy["contentFiltering"],
-                splashAuthSettings=group_policy["splashAuthSettings"],
-                vlanTagging=group_policy["vlanTagging"],
-                bonjourForwarding=group_policy["bonjourForwarding"],
-            )
-            logger.info(
-                f"Created group policy {policy_name} for network {network.split(',')[1]}"
-            )
+            try:
+                self.dashboard.networks.createNetworkGroupPolicy(
+                    network.split(",")[0],
+                    policy_name,
+                    scheduling=group_policy["scheduling"],
+                    bandwidth=group_policy["bandwidth"],
+                    firewallAndTrafficShaping=group_policy["firewallAndTrafficShaping"],
+                    contentFiltering=group_policy["contentFiltering"],
+                    # Wireless only settings for the next three
+                    splashAuthSettings=group_policy["splashAuthSettings"],
+                    vlanTagging=group_policy["vlanTagging"],
+                    bonjourForwarding=group_policy["bonjourForwarding"],
+                )
+                logger.info(
+                    f"Created group policy {policy_name} for network {network.split(',')[1]}"
+                )
+            except Exception as api_error:
+                logger.info(f"Failed to write group policy for {network.split(',')[1]}")
+                logger.info(api_error)
 
     def delete_group_policy(self, netid):
         logger.debug(f'The "delete_group_policy" function called with net_id {netid}')
