@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "soutools"
-version = "0.0.4"
+version = "0.0.5"
 dynamic = ["dependencies"]
 
 [project.scripts]
@@ -12,3 +12,6 @@ soutools = "soutools.main:main"
 
 [tool.setuptools.dynamic]
 dependencies = {file = ["requirements.txt"]}
+
+[tool.flake8]
+max-line-length = 99

@@ -131,7 +131,9 @@ class MerakiModel:
             return ("", "")
 
     def get_group_policies(self, netid):
-        logger.debug(f'The "get_group_policies" function called with network ID {netid}')
+        logger.debug(
+            f'The "get_group_policies" function called with network ID {netid}'
+        )
         group_policies = []
         group_policies = self.dashboard.networks.getNetworkGroupPolicies(netid)
         if not group_policies:
@@ -151,11 +153,11 @@ class MerakiModel:
             if policy_name == gp["name"]:
                 print(json.dumps(gp, indent=2))
                 return True
-        logger.info(f"The specified group policy \"{policy_name}\" was not found")
+        logger.info(f'The specified group policy "{policy_name}" was not found')
         return False
 
     def create_group_policy(self):
-        logger.debug(f'The "create_group_policy" function called')
+        logger.debug('The "create_group_policy" function called')
         group_policy = []
         policy_name = policy_source = destinations = ""
         # Load the values needed to complete this operation or exit
@@ -197,7 +199,7 @@ class MerakiModel:
             print(bar, end="", flush=True)
             network_id = network.split(",")[0]
             network_name = network.split(",")[1]
-            if not (network_id.startswith('L_') or network_id.startswith('N_')):
+            if not (network_id.startswith("L_") or network_id.startswith("N_")):
                 logger.info("Check the destination input file for errors")
                 logger.info(f"The network ID {network_id} is incorrect")
                 print(helpers.colorme("Error: Cannot continue", "red"))
@@ -237,7 +239,9 @@ class MerakiModel:
                 self.dashboard.networks.deleteNetworkGroupPolicy(
                     netid, gp["groupPolicyId"]
                 )
-                logger.info(f"Successfully deleted group policy with name {policy_name}")
+                logger.info(
+                    f"Successfully deleted group policy with name {policy_name}"
+                )
                 return True
         logger.info(f"Failed to delete group policy with name {policy_name}")
         logger.info("Please confirm that the name is correct and try again.")
@@ -342,7 +346,7 @@ class MerakiModel:
                 f"Updating radius settings for {net_name} and SSID number {ssid_num}"
             )
             logger.debug(
-                f"Calling Meraki dashboard with"\
+                f"Calling Meraki dashboard with"
                 f"{net_id} {ssid_num} {radius} {accounting}"
             )
             try:

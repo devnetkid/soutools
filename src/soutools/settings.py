@@ -9,38 +9,40 @@ import tomlkit
 
 class Settings:
     # In a future release will add ability to specify the path when running app
-    def __init__(self, file_name='soutools/settings/settings.toml'):
+    def __init__(self, file_name="soutools/settings/settings.toml"):
         self.file_name = file_name
         self.settings = None
         self.load_settings()
 
-
     def load_settings(self):
-        home_dir = os.path.expanduser('~')
+        home_dir = os.path.expanduser("~")
         settings_path = os.path.join(home_dir, self.file_name)
 
         if not os.path.exists(settings_path):
-            #Create path and copy default settings.toml into it
+            # Create path and copy default settings.toml into it
             temp = os.path.split(settings_path)
             os.makedirs(temp[0])
             default_settings = tomlkit.loads(toml_template)
             try:
-                with open(settings_path, 'w') as toml_data:
+                with open(settings_path, "w") as toml_data:
                     toml_data.write(tomlkit.dumps(default_settings))
             except FileNotFoundError:
-                raise ValueError(f'Wasn\'t able to create default config file at location {settings_path}')
+                raise ValueError(
+                    f"Wasn't able to create default config file at location {settings_path}"
+                )
         try:
-            with open(settings_path, 'r') as file:
+            with open(settings_path, "r") as file:
                 self.settings = tomlkit.loads(file.read())
         except tomlkit.exceptions.TOMLKitError as e:
-            raise ValueError(f'Error decoding TOML file: {str(e)}')
-
+            raise ValueError(f"Error decoding TOML file: {str(e)}")
 
     def get_value(self, key):
         if self.settings is None:
-            raise ValueError('Settings have not been loaded. Call load_settings() first.')
+            raise ValueError(
+                "Settings have not been loaded. Call load_settings() first."
+            )
 
-        keys = key.split('.')
+        keys = key.split(".")
         value = self.settings
         for key in keys:
             if isinstance(value, dict) and key in value:
@@ -60,7 +62,7 @@ default_org_name = ''
 default_net_id = ''
 default_net_name = ''
 
-# Section 3.1 settings 
+# Section 3.1 settings
 # Generate a report of all sites of type wireless
 [wireless_networks]
 output_file = 'soutools/input/wireless.txt'
@@ -109,7 +111,7 @@ servers = [
 port = 1813
 secret = 'mySecret'
 
-# Creating group policies 
+# Creating group policies
 [group_policies]
 source_network_id = ''
 source_policy_name = ''
