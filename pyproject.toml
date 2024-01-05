@@ -5,13 +5,20 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "soutools"
 version = "0.0.5"
+readme = "README.md"
+license = { text = "MIT License" }
+description = "Tools to interact with the Meraki API"
+authors = [{ name = "J. Fausett" }]
 dynamic = ["dependencies"]
+
+[project.urls]
+Homepage = "https://github.com/devnetkid"
 
 [project.scripts]
 soutools = "soutools.main:main"
 
 [tool.setuptools.dynamic]
-dependencies = {file = ["requirements.txt"]}
+dependencies = { file = ["requirements.txt"] }
 
 [tool.flake8]
 max-line-length = 99

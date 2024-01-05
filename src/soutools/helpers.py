@@ -161,7 +161,7 @@ def clear_screen():
     os.system(cmd)
 
 
-# https://patorjk.com/software/taag/ using formatting "standard"
+# https://patorjk.com/software/taag/ using font "standard"
 
 menu_title = colorme(
     r"""
