@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools", "setuptools-scm"]
+requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -10,9 +10,16 @@ license = { text = "MIT License" }
 description = "Tools to interact with the Meraki API"
 authors = [{ name = "J. Fausett" }]
 dynamic = ["dependencies"]
+keywords = ["Meraki", "API", "TUI"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Topic :: Meraki :: API Tools",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python",
+]
 
 [project.urls]
-Homepage = "https://github.com/devnetkid"
+Repository = "https://github.com/devnetkid"
 
 [project.scripts]
 soutools = "soutools.main:main"
