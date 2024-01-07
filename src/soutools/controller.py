@@ -75,8 +75,10 @@ def view_network():
 
 def policy_options():
     menu_title = helpers.menu_title
+    menu_subtitle = "Policy Options Menu"
     policy_menu = menu.Menu(
         menu_title,
+        menu_subtitle,
         [
             ("Check a site for existing group policies", policy_report),
             ("View a particular group policy for a site", policy_view),
@@ -159,8 +161,10 @@ def policy_delete():
 
 def wireless_options():
     menu_title = helpers.menu_title
+    menu_subtitle = "Wireless Options Menu"
     wireless_menu = menu.Menu(
         menu_title,
+        menu_subtitle,
         [
             ("Generate a report of all sites of type wireless", wireless_report),
             (
@@ -268,8 +272,10 @@ def quit():
 
 def main_menu():
     menu_title = helpers.menu_title
+    menu_subtitle = "Main Menu"
     main_menu = menu.Menu(
         menu_title,
+        menu_subtitle,
         [
             ("Select an organization", select_organization),
             ("View the selected organization", view_organization),

@@ -6,25 +6,23 @@ from collections import namedtuple
 
 from soutools import helpers
 
-Option = namedtuple("Option", ["label", "callback"])
-
 
 class Menu:
-    def __init__(self, title, options):
-        self.title = title
-        self._options = [Option(*option) for option in options]
+    def __init__(self, title, subtitle, options):
+        menuitem = namedtuple("Option", ["label", "callback"])
+        self._title = title
+        self._subtitle = subtitle
+        self._options = [menuitem(*option) for option in options]
 
     def display(self):
         helpers.clear_screen()
-        print(self.title)
+        print(self._title)
+        print(f"  {self._subtitle}")
+        print()
         menu_item = ""
         for i, option in enumerate(self._options, start=1):
             menu_item += helpers.colorme(f"    {str(i)} - {option.label}\n", "green")
         print(menu_item)
-
-    def callback(self, i):
-        if i <= len(self._options):
-            return self._options[i - 1].callback
 
     def get_input(self):
         while True:
